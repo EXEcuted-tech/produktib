@@ -1,46 +1,88 @@
-# Getting Started with Create React App
+# Produktib: An Online Task Management System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Add,update, and manage your takss!
 
-## Available Scripts
+Welcome to the Produktib README! This document offers an overview of our online task management system's features and setup instructions. This guide will help you get started whether you're a developer looking to incorporate this platform into your website or a user interested in making reservations. This project will entail the details of the following functionalities:
 
-In the project directory, you can run:
+* Create an online task management system
 
-### `npm start`
+## Important Links 
+1. [UI Style Guide](https://www.figma.com/file/s4nPFMaeo5i0L4icc8rdEL/Produktib?type=design&node-id=1-2&mode=design)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Setting Up the Project
+1. Clone the project in any local directory you like
+Example using the git CLI
+```
+git clone https://github.com/EXEcuted-tech/produktib.git
+```
+2. CD into the root folder
+```
+cd produktib
+```
+3. Install dependencies
+```
+npm install
+```
+4. Run the project
+```
+npm start
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Commands To Run During Develompemnt
+1. Start your local front-end serve
+```
+npm start
 
-### `npm test`
+```
+2. Make sure to that your XAMPP with the imported database and mySQL server is running as well
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## File Structure
+1. `src\assets` - This is where you place images (.png, .svg, etc...)
+2. `src\components` - Common components to be used throughout the application, you usually don't wanna touch this folder
+5. `src\common` -  Where common utils, style, and colors are compiled and accessed
 
-### `npm run build`
+## Review
+1. When you clone the repository, make sure you are in the `main` branch. You can check by running this command:
+```
+git status
+```
+Expected output would be:
+```
+On branch main
+Your branch is up to date with 'origin/main'.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+nothing to commit, working tree clean
+```
+2.Pull the latest changes
+```
+git pull
+```
+3. When you have finished adding your changes, create a branch using the `Card Number` on your assigned task in [Trello]()
+```
+Example for #3:
+//1. Create Branch using the command bellow
+$ git branch ticket-12
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+//2. Check if the branch was created
+$ git branch
+ticket-12
+* master
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+//3. Switch to the newly created branch
+$ git checkout ticket-12
 
-### `npm run eject`
+//4. Repeat Step 2
+$ git branch
+* ticket-12
+master
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+//5. Commit your files and either push or pull the changes
+$ git add .
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+$ git commit -m "Testing Push and Pull Request"
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+$ git push
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+4. Send the pull review link of the new changes you added to the project. The format should look like the link bellow:
+`https://github.com/EXEcuted-tech/produktib/pull/12`
