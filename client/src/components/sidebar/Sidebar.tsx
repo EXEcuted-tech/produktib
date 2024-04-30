@@ -13,7 +13,7 @@ const Sidebar = () => {
                 <h1 className='font-bold text-[#D3D3D3] text-[1.15em] mr-[7%]'>TASK CATEGORIES</h1>
                 <FaPlus className='text-[#D3D3D3] text-[1.15em] mt-[1.5%] hover:cursor-pointer hover:text-white'/>
             </div>
-
+            
             
         </div>        
     </div>
