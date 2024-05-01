@@ -6,7 +6,7 @@ import Sidebar from './components/sidebar/Sidebar'
 
 function App() {
   return (
-    <div className="animate-fade-in font-montserrat">
+    <div className="animate-fade-in font-montserrat flex">
       <div className='w-[14%]'>
         <Sidebar/>
       </div>
