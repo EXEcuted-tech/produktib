@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require ('./src/common/colors.ts');
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
@@ -7,6 +8,14 @@ module.exports = {
     extend: {
       fontFamily: {
         'montserrat': ['Montserrat','sans-serif'],
+      },
+      colors: {
+        primary: colors.primary,
+        secondary: colors.secondary,
+        blue: colors.blue,
+        lightBlue: colors.lightBlue,
+        yellow: colors.yellow,
+        alert: '#CB0000'
       },
       keyframes: {
         'fade-in': {
