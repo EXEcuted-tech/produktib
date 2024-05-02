@@ -16,7 +16,7 @@ const Sidebar = () => {
         <div className='bg-[#001A27] h-[8vh] rounded-tr-3xl'>
             <img src={logo} alt="Produktib Logo" className="h-auto w-[15rem] py-[5%] pl-[10%]"></img>
         </div>
-        <div className='bg-[#023047] h-[92vh]'>
+        <div className='bg-primary h-[92vh]'>
             <div className='mx-[10%] pt-[7%] flex items-center'>
                 <h1 className='font-bold text-[#D3D3D3] text-[1.15em] mr-[7%]'>TASK CATEGORIES</h1>
                 <FaPlus className='text-[#D3D3D3] text-[1.15em] hover:cursor-pointer hover:text-white'/>
