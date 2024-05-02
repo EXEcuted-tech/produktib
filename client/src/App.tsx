@@ -7,6 +7,8 @@ import Delete from './components/modal/Delete';
 import Edit from './components/modal/Edit';
 import Category from './components/modal/Category';
 
+import { FaClipboardList } from "react-icons/fa";
+
 //We will use this ra since usa ra ato page hehe
 
 function App() {
@@ -15,7 +17,6 @@ function App() {
       <div className='flex'>
         <div className='w-[14%]'>
           <Sidebar/>
-
         {/*uncomment to view modal ui
           <Edit/>
           <Category/>
@@ -23,10 +24,20 @@ function App() {
           <Delete />
         */}
         </div>
-        <div>
+        <div className='w-[86%] h-full'>
           <Header/>
-          <div className='bg-[#F3F3F3] w-[100%] h-[93vh]'>
-            TEST
+          <div className='bg-[#F3F3F3] h-[91.9vh]'>
+
+              <div className='flex pt-[2%] pl-[3%] items-center'>
+                <FaClipboardList className='text-[1.5em]'/>
+                <h1 className='text-[1.8em] font-medium pl-[0.5%]'>Task Board</h1>
+                
+              </div>
+
+              <div>
+                
+              </div>
+
           </div>
         </div>
       </div>
