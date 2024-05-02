@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
+
 import Sidebar from './components/sidebar/Sidebar'
 import Header from './components/header/Header';
 import Discard from './components/modal/Discard';
@@ -7,7 +8,9 @@ import Delete from './components/modal/Delete';
 import Edit from './components/modal/Edit';
 import Category from './components/modal/Category';
 
-import { FaClipboardList, FaSearch } from "react-icons/fa";
+import { FaClipboardList, FaSearch, FaPlus} from "react-icons/fa";
+import { BsThreeDots } from "react-icons/bs";
+import search from './assets/search.png'
 
 //We will use this ra since usa ra ato page hehe
 
@@ -23,26 +26,25 @@ function App() {
 
   return (
     <div className="animate-fade-in font-montserrat">
-      <div className='flex'>
-        <div className='w-[14%]'>
-          <Sidebar/>
         {/*uncomment to view modal ui
           <Edit/>
           <Category/>
           <Discard />
           <Delete />
         */}
+      <div className='flex'>
+        <div className='w-[14%]'>
+          <Sidebar/>
         </div>
         <div className='w-[86%] h-full'>
           <Header/>
           <div className='bg-[#F3F3F3] h-[91.9vh]'>
-
+              {/* First Section */}
               <div className='flex pt-[2%] pl-[3%]'>
                 <div className='flex items-center w-[58%]'>
                   <FaClipboardList className='text-[1.5em]'/>
                   <h1 className='text-[1.8em] font-medium pl-[0.5%]'>Task Board</h1>
                 </div>
-
                 <div className='flex w-[42%] relative'>
                   <FaSearch className='text-[1.2em] absolute top-[26%] ml-[2%] text-[#707070]'/>
                   <input type="text" placeholder="Search Task Title or Description..." 
@@ -70,8 +72,45 @@ function App() {
                 </div>
               </div>
 
+              {/* Second Section */}
               <div>
-                
+                <table className='w-[93%] mx-[3%] mt-[1%] text-[#717171] text-[1.2em]'>
+                  <thead className='text-left'>
+                    {/* Column Labels */}
+                    <tr>
+                      <th>TASK TITLE</th>
+                      <th>TASK DESCRIPTION</th>
+                      <th>STATUS</th>
+                      <th>
+                       <BsThreeDots />
+                      </th>
+                    </tr>
+
+                    {/* Add Task */}
+                    <tr className='hover:cursor-pointer'>
+                      <td colSpan={4}>
+                        <div className='flex items-center my-[0.5%] py-[1%] pl-[2%] border-dashed border-2 border-yellow rounded-[12px]'>
+                          <FaPlus className='text-secondary text-[1.2em]'/>
+                          <h1 className='text-[#3C3C3C] text-[1.2em] font-semibold pl-[1.2%]'>Add Task</h1>
+                        </div>
+                      </td>
+                    </tr>
+
+                  </thead>
+                  <tbody className='w-[100%]'>
+                    {taskExist
+                    ?
+                    <> 
+                    Upcoming
+                     </>
+                    :
+                      <div className='w-full mt-[18%] ml-[85%]'>
+                         <img src={search} alt="Figure Searching" className=""></img>
+                         <h1 className='text-[#FB8500] font-bold text-[1.3em]'>No Tasks Listed Yet!</h1>
+                      </div>
+                    }
+                  </tbody>
+                </table>
               </div>
 
           </div>
