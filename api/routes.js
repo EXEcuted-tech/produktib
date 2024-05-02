@@ -4,7 +4,8 @@ const app = express()
 const cors = require('cors');
 
 //Routes
-
+const taskRoutes = require('./routes/taskRoutes')
+const catRoutes = require('./routes/categoryRoutes')
 
 app.use(cors({
     origin: [process.env.CORS_ORIGIN],
@@ -31,7 +32,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
-// app.use('/category',);
-// app.use('/task',);  
+app.use('/category',catRoutes);
+app.use('/task',taskRoutes);  
 
 module.exports = app;
