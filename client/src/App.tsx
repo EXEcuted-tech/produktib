@@ -7,7 +7,7 @@ import Delete from './components/modal/Delete';
 
 function App() {
   return (
-    <div className="animate-fade-in font-montserrat">
+    <div className="animate-fade-in font-montserrat flex">
       <div className='w-[14%]'>
         <Sidebar/>
         {/*
