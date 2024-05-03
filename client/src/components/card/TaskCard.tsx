@@ -13,7 +13,7 @@ const TaskCard: React.FC<TaskCardProps> = (task) => {
   },[])
 
   return (
-    <div className='w-[93%] bg-white mx-[3%] mt-[1%] rounded-lg drop-shadow-md dark:bg-black z-0'>
+    <div className='relative w-[93%] bg-white mx-[3%] mt-[1%] rounded-lg drop-shadow-md dark:bg-black z-0'>
         <table className='w-[100%] text-[#717171] text-[1.2em]'>
             <tbody>
                 <tr className='text-left'>

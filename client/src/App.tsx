@@ -81,9 +81,9 @@ function App() {
           <Discard />
           <Delete />
         */}
-      {openAddModal && (<Add onCancel={handleButtonClick} onClose={handleButtonClick} onSubmit={handleButtonClick}></Add>)}
+      {openAddModal && (<Add onCancel={handleButtonClick} onSubmit={handleButtonClick}></Add>)}
 
-      <div className='flex'>
+      <div className='flex z-0'>
         <div className='w-[14%] dark:bg-black'>
           <Sidebar setChosenID={setChosenID}/>
         </div>

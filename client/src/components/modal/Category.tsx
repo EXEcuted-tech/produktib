@@ -1,43 +1,65 @@
-import Reac,{useEffect, useState} from 'react'
-import { IoMdClose } from "react-icons/io";
+import Reac,{useEffect, useRef, useState} from 'react'
+import { IoCloseOutline } from "react-icons/io5";
 import { TbTextSize, TbColorFilter } from "react-icons/tb";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 
 
-const Category = (onButtonClick) => {
+const Category = ({handleButtonClick}) => {
 const [color, setColor] = useState("#FFB703");
 const [showColorPicker, setShowColorPicker] = useState(false);
+const colorPickerRef = useRef<HTMLDivElement>(null); 
 
-const handleCircleClick = () => {
+  const handleCircleClick = () => {
     setShowColorPicker(!showColorPicker);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (colorPickerRef.current && !colorPickerRef.current.contains(event.target as Node)) {
+        setShowColorPicker(false);
+      }
+    };
+
+    if (showColorPicker) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showColorPicker]);
+
   return (
-    <div className='font-lato z-[100]'>
-        <div className='z-0 absolute top-0 left-0 bg-[rgba(0,0,0,0.1)] w-[100vw] h-[100vh] backdrop-blur-sm'>
-            <div className='w-[50%] h-[60%] rounded-lg shadow-xl bg-white mt-[10%] mb-auto ml-[33%] mr-auto justify-center'>
+    <div className='absolute font-montserrat z-[250]'>
+        <div className='z-0 absolute top-0 left-0 bg-[rgba(0,0,0,0.1)] w-[100vw] h-[100vh] backdrop-brightness-50'>
+            <div className='w-[50%] h-[55%] rounded-2xl shadow-xl bg-white mt-[10%] mb-auto ml-[33%] mr-auto justify-center'>
                 <div className='flex w-full h-[20%] bg-[#023047] items-center rounded-2xl rounded-b-none dark:bg-black'>
-                    <p className='text-white text-4xl font-semibold pl-[4%]'>Add Task Category</p>
-                    <IoMdClose className='text-white text-[1.8em] mr-[3%] hover:cursor-pointer hover:animate-shake' onClick={() => onButtonClick()}/>
+                    <p className='text-white w-[90%] text-4xl font-bold pl-[4%]'>Add Task Category</p>
+                    <IoCloseOutline className='text-white text-[3.5em] hover:text-gray-300 hover:cursor-pointer'
+                       onClick={()=> handleButtonClick()}/>
                 </div>
 
                  {/* Category Name */}
                 <div>
-                    <div className='mx-[7%] pt-[5%] flex'>
+                    <div className='mx-[7%] pt-[4%] flex'>
                         <TbTextSize className='text-4xl ml-[1%]' />
                         <p className='text-2xl font-semibold ml-[1%] mt-[0.4%]'> Category Name</p>
                     </div>
                     <div className='ml-[8%] text-[1.2em] font-semibold mt-[1%]'>
                         <input 
                             type="text"
-                            className='w-[85%] p-4 pl-5 rounded-xl bg-white border-[3px] border-[#FFB703] text-2xl'>
+                            className='w-[85%] p-4 pl-5 rounded-xl bg-white border-[3px] border-[#FFB703] text-2xl
+                            placeholder-gray-500 placeholder:font-bold font-bold'
+                            placeholder="Enter Category Name">
                         </input>
                     </div>
                 </div>
 
                  {/* Color */}
                  <div>
-                    <div className='mx-[7%] pt-[5%] flex'>
+                    <div className='mx-[7%] pt-[4%] flex'>
                         <TbColorFilter className='text-4xl ml-[1%]' />
                         <p className='text-2xl font-semibold ml-[1%] mt-[0.4%]'>Color</p>
                     </div>
@@ -58,7 +80,7 @@ const handleCircleClick = () => {
                         </div>
   
                         {showColorPicker && (
-                        <div className='absolute top-[52vh] left-[44%] animate-fade-in'>
+                        <div className='absolute top-[61vh] left-[38%] animate-fade-in' ref={colorPickerRef}>
                         <HexColorPicker 
                           color={color} 
                           onChange={setColor}
@@ -69,10 +91,10 @@ const handleCircleClick = () => {
                 </div>
 
                  {/* Buttons */}
-                 <div className='flex flex-row justify-end mt-[5%] mr-[11%]'>
-                    <button className='text-2xl font-bold py-2.5 px-2.5 text-black rounded-lg bg-[#D6D6D6] font-semibold mr-[3%] hover:bg-[#bebebe] transition-colors delay-250 duration-[3000] ease-in'>
+                 <div className='flex flex-row justify-end mt-[2%]'>
+                    <button className='py-[1%] px-[2%] text-[#023047] text-[1.3em] rounded-[3px] bg-[#D6D6D6] font-semibold mr-[2%] hover:bg-[#bebebe] transition-colors delay-250 duration-[3000] ease-in'>
                         Cancel</button>
-                    <button className='text-2xl font-bold py-2.5 px-5 text-white rounded-lg bg-[#FB8500] font-semibold mr-[3%] hover:bg-[#FF9925] transition-colors delay-250 duration-[3000] ease-in'>
+                    <button className='py-[1%] px-[3%] text-[1.3em] text-white rounded-[3px] bg-[#FB8500] font-semibold mr-[8%] hover:bg-[#FF9925] transition-colors delay-250 duration-[3000] ease-in'>
                         Save</button>
                  </div>
             </div>

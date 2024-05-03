@@ -38,7 +38,7 @@ const Sidebar: React.FC<SidebarProps> = ({setChosenID}) => {
 
   return (
     <div className='w-full h-full'>
-        {openCategory && <Category onButtonClick={handleButtonClick}/>}
+        {openCategory && <Category handleButtonClick={handleButtonClick}/>}
         <div className='bg-[#001A27] h-[8vh] rounded-tr-3xl dark:bg-[#1c1c1c]'>
             <img src={logo} alt="Produktib Logo" className="h-auto w-[15rem] py-[5%] pl-[10%]"></img>
         </div>
