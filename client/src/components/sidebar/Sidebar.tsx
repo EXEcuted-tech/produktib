@@ -1,15 +1,34 @@
-import React,{useEffect, useState} from 'react'
+import React,{useEffect, useRef, useState} from 'react'
+import axios from 'axios';
+import config from '../../common/config';
 import logo from "../../assets/logo.png"
 import { FaPlus,FaCircle } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { CatCardProps,SidebarProps } from '../../common/interface';
 
-const Sidebar = () => {
-  //Pag set lang ug interface diri Tyrone ako rani gi static for now
-  const [catColor,setCatColor] = useState('');
-  
+const Sidebar: React.FC<SidebarProps> = ({setChosenID}) => {
+  const [category,setCategory] = useState<CatCardProps[]>([])
+  const [currID,setCurrID] = useState(1);
+
   useEffect (()=>{
-    setCatColor('#FFB703')
+    axios.get(`${config.API}/category/retrieve_all`)
+    .then((res)=>{
+      if(res.data.success==true){
+        setCategory(res.data.category);
+        handleCategorySelection(1);
+      }
+    }).catch((error)=>{
+
+    })
   },[])
+
+  const handleCategorySelection = (categoryId:number) => {
+    console.log("Sidebar Value: ",categoryId);
+    localStorage.removeItem('category_id');
+    setCurrID(categoryId);
+    setChosenID(JSON.stringify(categoryId));
+    localStorage.setItem('category_id', JSON.stringify(categoryId));
+  }
 
   return (
     <div className='w-full h-full'>
@@ -25,24 +44,18 @@ const Sidebar = () => {
             {/* Category List */}
             <div className='pt-[2%]'>
                 <ul>
-                    <li className='py-[2%] bg-[#085A83] hover:cursor-pointer'>
-                    <div className='flex items-center justify-between mx-[10%]'>
-                        <div className='flex items-center'>
-                            <FaCircle className='mr-[5%] text-[1.15em]' style={{ color: catColor }}/>
-                            <p className='text-[1.15em] text-white font-semibold'>Academics</p>
+                    {category.map((cat,index)=>(
+                        <li className={`${cat.category_id == currID ? 'bg-[#085A83]': 'bg-none'} py-[3%] hover:cursor-pointer`} 
+                        onClick={() => handleCategorySelection(cat.category_id)}>
+                        <div className='flex items-center justify-between mx-[10%]'>
+                            <div className='flex items-center'>
+                                <FaCircle className='mr-[5%] text-[1.15em]' style={{ color: cat.color }}/>
+                                <p className='text-[1.15em] text-white font-semibold'>{cat.category_name}</p>
+                            </div>
+                            <BsThreeDotsVertical className='hover:animate-shake text-white'/>
                         </div>
-                        <BsThreeDotsVertical className='hover:animate-shake text-white'/>
-                    </div>
-                    </li>
-                    <li className='py-[2%] hover:cursor-pointer hover:bg-[#085A83]'>
-                    <div className='flex items-center justify-between mx-[10%]'>
-                        <div className='flex items-center'>
-                            <FaCircle className='mr-[5%] text-[1.15em] text-[#FB8500]'/>
-                            <p className='text-[1.15em] text-white font-semibold'>Work</p>
-                        </div>
-                        <BsThreeDotsVertical className='hover:animate-shake text-white'/>
-                    </div>
-                    </li>
+                        </li>
+                    ))}
                 </ul>
                 {/* Category Row */}
 

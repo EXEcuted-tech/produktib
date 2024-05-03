@@ -12,3 +12,7 @@ export interface CatCardProps {
     category_name: string;
     color:string;
 }
+
+export interface SidebarProps {
+    setChosenID: React.Dispatch<React.SetStateAction<string>>;
+}
