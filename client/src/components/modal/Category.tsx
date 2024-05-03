@@ -4,7 +4,7 @@ import { TbTextSize, TbColorFilter } from "react-icons/tb";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 
 
-const Category = (onSubmit, onCancel, onClose) => {
+const Category = (onButtonClick) => {
 const [color, setColor] = useState("#FFB703");
 const [showColorPicker, setShowColorPicker] = useState(false);
 
@@ -18,7 +18,7 @@ const handleCircleClick = () => {
             <div className='w-[50%] h-[60%] rounded-lg shadow-xl bg-white mt-[10%] mb-auto ml-[33%] mr-auto justify-center'>
                 <div className='flex w-full h-[20%] bg-[#023047] items-center rounded-2xl rounded-b-none dark:bg-black'>
                     <p className='text-white text-4xl font-semibold pl-[4%]'>Add Task Category</p>
-                    <IoMdClose className='text-white text-[1.8em] mr-[3%] hover:cursor-pointer hover:animate-shake' onClick={() => onCancel()}/>
+                    <IoMdClose className='text-white text-[1.8em] mr-[3%] hover:cursor-pointer hover:animate-shake' onClick={() => onButtonClick()}/>
                 </div>
 
                  {/* Category Name */}
