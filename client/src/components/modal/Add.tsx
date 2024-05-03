@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { FaT, FaAlignLeft, FaAlignJustify } from "react-icons/fa6";
-
+import { IoCloseOutline } from "react-icons/io5";
 
 const Add = ({onSubmit, onCancel, onClose}) => {
 
@@ -8,7 +8,9 @@ const Add = ({onSubmit, onCancel, onClose}) => {
         <div className='absolute w-full h-full overflow-auto text-2xl z-[100] backdrop-brightness-50'>
             <div className='w-[50%] h-[60%] ml-[33%] mr-auto mt-[10%] mb-auto rounded-2xl z-100'>
                 <div className='flex w-full h-[20%] bg-[#023047] items-center rounded-2xl rounded-b-none dark:bg-black'>
-                    <p className='text-white ml-[6%] text-4xl font-semibold '>Add Task</p>
+                    <p className='text-white w-[85%] ml-[6%] text-4xl font-semibold '>Add Task</p>
+                    <IoCloseOutline className='text-white text-[2em] hover:text-gray-300 hover:cursor-pointer'
+                       onClick={()=> onCancel()}/>
                 </div>
                 <div className='flex w-full h-[80%] bg-[#F1F1F1] rounded-2xl rounded-t-none dark:border dark:border-black'>
                     <form className='w-[83%] ml-[8%] mt-[5%] mb-[3%]'>
@@ -28,8 +30,10 @@ const Add = ({onSubmit, onCancel, onClose}) => {
                             <textarea id='description' className='w-full h-[8rem] p-2 pl-5 resize-none text-xl rounded-lg border-[#FFB703] border-2 dark:border-black' placeholder="Enter Task Description"></textarea>
                         </div>
                         <div className='flex justify-end'>
-                            <button className="bg-[#D6D6D6] text-[#023047] text-2xl font-bold py-2.5 px-2.5 rounded dark:border-black dark:bg-white dark:text-black" onClick={()=> onCancel()}>Cancel</button>
-                            <button type="submit" className="text-white ml-[3%] bg-[#FB8500] font-semibold py-2.5 px-6 rounded dark:bg-black" onClick={()=> onCancel()}>Save</button>
+                            <button className="bg-[#D6D6D6] text-[#023047] text-2xl font-bold py-2.5 px-2.5 rounded dark:border-black dark:bg-white dark:text-black
+                                               hover:bg-[#b0b0b0] hover:text-[#00314a]" onClick={()=> onCancel()}>Cancel</button>
+                            <button type="submit" className="text-white ml-[3%] bg-[#FB8500] font-semibold py-2.5 px-6 rounded dark:bg-black
+                                                            hover:bg-[#db7400]" onClick={()=> onCancel()}>Save</button>
                         </div>
 
                     </form>
