@@ -5,7 +5,7 @@ import { FaT, FaAlignLeft, FaAlignJustify } from "react-icons/fa6";
 const Add = ({onSubmit, onCancel, onClose}) => {
 
     return(
-        <div className='absolute w-full h-full overflow-auto text-2xl z-2 backdrop-blur-sm'>
+        <div className='absolute w-full h-full overflow-auto text-2xl z-[100] backdrop-brightness-50'>
             <div className='w-[50%] h-[60%] ml-[33%] mr-auto mt-[10%] mb-auto rounded-2xl z-100'>
                 <div className='flex w-full h-[20%] bg-[#023047] items-center rounded-2xl rounded-b-none dark:bg-black'>
                     <p className='text-white ml-[6%] text-4xl font-semibold '>Add Task</p>

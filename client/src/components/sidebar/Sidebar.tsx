@@ -39,27 +39,27 @@ const Sidebar: React.FC<SidebarProps> = ({setChosenID}) => {
   return (
     <div className='w-full h-full'>
         {openCategory && <Category onButtonClick={handleButtonClick}/>}
-        <div className='bg-[#001A27] h-[8vh] rounded-tr-3xl dark:bg-black'>
+        <div className='bg-[#001A27] h-[8vh] rounded-tr-3xl dark:bg-[#1c1c1c]'>
             <img src={logo} alt="Produktib Logo" className="h-auto w-[15rem] py-[5%] pl-[10%]"></img>
         </div>
-        <div className='bg-primary h-[92vh] dark:bg-black'>
+        <div className='bg-primary h-[92vh] dark:bg-[#292929]'>
             <div className='mx-[10%] pt-[7%] flex items-center'>
-                <h1 className='font-bold text-[#D3D3D3] text-[1.15em] mr-[7%] dark:text-gray-500'>TASK CATEGORIES</h1>
-                <FaPlus className='text-[#D3D3D3] text-[1.15em] hover:cursor-pointer hover:text-white dark:text-gray-500 dark:hover:text-white' onClick={() => setOpenCategory(true)}/>
+                <h1 className='font-bold text-[#D3D3D3] text-[1.15em] mr-[7%] dark:white'>TASK CATEGORIES</h1>
+                <FaPlus className='text-[#D3D3D3] text-[1.15em] hover:cursor-pointer hover:text-white dark:text-white dark:hover:text-gray-500' onClick={() => setOpenCategory(true)}/>
             </div>
 
             {/* Category List */}
             <div className='pt-[2%]'>
                 <ul>
                     {category.map((cat,index)=>(
-                        <li className={`${cat.category_id == currID ? 'bg-[#085A83]': 'bg-none'} py-[3%] hover:cursor-pointer`} 
+                        <li className={`${cat.category_id == currID ? 'bg-[#085A83] dark:bg-white': 'bg-none'} py-[3%] hover:cursor-pointer`} 
                         onClick={() => handleCategorySelection(cat.category_id)}>
                         <div className='flex items-center justify-between mx-[10%]'>
                             <div className='flex items-center'>
                                 <FaCircle className='mr-[5%] text-[1.15em]' style={{ color: cat.color }}/>
-                                <p className='text-[1.15em] text-white font-semibold'>{cat.category_name}</p>
+                                <p className={`text-[1.15em] text-white font-semibold ${cat.category_id == currID && 'dark:text-black'} `}>{cat.category_name}</p>
                             </div>
-                            <BsThreeDotsVertical className='hover:animate-shake text-white'/>
+                            <BsThreeDotsVertical className={`hover:animate-shake text-white ${cat.category_id == currID && 'dark:text-black'}`}/>
                         </div>
                         </li>
                     ))}

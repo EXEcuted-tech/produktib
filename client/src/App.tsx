@@ -140,9 +140,10 @@ function App() {
                     {/* Add Task */}
                     <tr className='hover:cursor-pointer'>
                       <td colSpan={4}>
-                        <div className='flex items-center my-[0.5%] py-[1%] pl-[2%] border-dashed border-2 border-yellow rounded-[12px] dark:border-black'>
-                          <FaPlus className='text-secondary text-[1.2em] dark:text-black' onClick={() => setOpenAddModal(true)}/>
-                          
+                        <div className='flex items-center my-[0.5%] py-[1%] pl-[2%] border-dashed border-2 border-yellow rounded-[12px] dark:border-black
+                                        hover:bg-[#ffd6a8] dark:hover:bg-gray-300'
+                                        onClick={() => setOpenAddModal(true)}>
+                          <FaPlus className='text-secondary text-[1.2em] dark:text-black'/>
                           <h1 className='text-[#3C3C3C] text-[1.2em] font-semibold pl-[1.2%]'>Add Task</h1>
                         </div>
                       </td>
