@@ -4,11 +4,13 @@ import config from '../../common/config';
 import logo from "../../assets/logo.png"
 import { FaPlus,FaCircle } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import Category from '../modal/Category';
 import { CatCardProps,SidebarProps } from '../../common/interface';
 
 const Sidebar: React.FC<SidebarProps> = ({setChosenID}) => {
   const [category,setCategory] = useState<CatCardProps[]>([])
   const [currID,setCurrID] = useState(1);
+  const [openCategory, setOpenCategory] = useState(false);
 
   useEffect (()=>{
     axios.get(`${config.API}/category/retrieve_all`)
@@ -22,6 +24,10 @@ const Sidebar: React.FC<SidebarProps> = ({setChosenID}) => {
     })
   },[])
 
+  const handleButtonClick = () => {
+    setOpenCategory(false);
+  }
+
   const handleCategorySelection = (categoryId:number) => {
     console.log("Sidebar Value: ",categoryId);
     localStorage.removeItem('category_id');
@@ -32,13 +38,14 @@ const Sidebar: React.FC<SidebarProps> = ({setChosenID}) => {
 
   return (
     <div className='w-full h-full'>
-        <div className='bg-[#001A27] h-[8vh] rounded-tr-3xl'>
+        {openCategory && <Category onButtonClick={handleButtonClick}/>}
+        <div className='bg-[#001A27] h-[8vh] rounded-tr-3xl dark:bg-black'>
             <img src={logo} alt="Produktib Logo" className="h-auto w-[15rem] py-[5%] pl-[10%]"></img>
         </div>
-        <div className='bg-primary h-[92vh]'>
+        <div className='bg-primary h-[92vh] dark:bg-black'>
             <div className='mx-[10%] pt-[7%] flex items-center'>
-                <h1 className='font-bold text-[#D3D3D3] text-[1.15em] mr-[7%]'>TASK CATEGORIES</h1>
-                <FaPlus className='text-[#D3D3D3] text-[1.15em] hover:cursor-pointer hover:text-white'/>
+                <h1 className='font-bold text-[#D3D3D3] text-[1.15em] mr-[7%] dark:text-gray-500'>TASK CATEGORIES</h1>
+                <FaPlus className='text-[#D3D3D3] text-[1.15em] hover:cursor-pointer hover:text-white dark:text-gray-500 dark:hover:text-white' onClick={() => setOpenCategory(true)}/>
             </div>
 
             {/* Category List */}

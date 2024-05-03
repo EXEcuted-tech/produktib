@@ -14,9 +14,11 @@ const deleteTask = (req,res)=>{
 }
 
 const retrieveAll = (req,res)=>{   
-    const retrieveTasks = `SELECT * FROM task ORDER BY ${orderValue}`
+    const {col,val,order} = req.query;
+    
+    const retrieveTasks = `SELECT * FROM task WHERE ??=? ORDER BY time_stamp ${order}`
 
-    db.query(retrieveTasks, (err, rows) => {
+    db.query(retrieveTasks,[col,val], (err, rows) => {
       if (err) {
         console.error('Error retrieving all records:', err);
         return res.status(500).json({ status: 500, success:false,error: 'Error retrieving all records' });
