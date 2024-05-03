@@ -42,7 +42,7 @@ const TaskCard: React.FC<TaskCardProps> = (task) => {
                         <PiDotsThreeOutlineVerticalFill className='hover:cursor-pointer'
                             onClick={()=>toggleOptions(task.task_id)}/>
                         {task.isActive && showOptions &&
-                        <div className='absolute bg-white top-[-80%] rounded-[5px] border text-[0.8em] w-[8%] ml-[1%] dark:bg-gray-500 z-0'>
+                        <div className='animate-fade-in absolute bg-white top-[-80%] rounded-[5px] border text-[0.8em] w-[8%] ml-[1%] dark:bg-gray-500 z-0'>
                             <ul className='z-[250]'>
                                 <li className='flex items-center py-[5%] pl-[6%] hover:bg-[#d6d6d6] hover:cursor-pointer dark:text-white
                                     dark:hover:bg-gray-600'>

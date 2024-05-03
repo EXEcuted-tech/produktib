@@ -61,7 +61,7 @@ module.exports = {
           '100%': {
             transform: 'scale(1)',
           }
-        }
+        },
       },
       animation: {
         'pop1': 'pop1 0.5s cubic-bezier(0.47, 2.02, 0.31, -0.36)',

@@ -2,7 +2,7 @@ import React,{useEffect, useRef, useState} from 'react'
 import axios from 'axios';
 import config from '../../common/config';
 import logo from "../../assets/logo.png"
-import { FaPlus,FaCircle } from "react-icons/fa";
+import { FaPlus,FaCircle, FaTrashAlt } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Category from '../modal/Category';
 import { CatCardProps,SidebarProps } from '../../common/interface';
@@ -36,6 +36,21 @@ const Sidebar: React.FC<SidebarProps> = ({setChosenID}) => {
     localStorage.setItem('category_id', JSON.stringify(categoryId));
   }
 
+  const [showOptions, setShowOptions] = useState(false);
+  const [activeCatId, setActiveCatId] = useState<number | null>(null);
+
+  const toggleOptions = (catId:number) =>{
+
+    if(activeCatId === catId){
+        setShowOptions(!showOptions);
+    }else{
+        setShowOptions(true);
+    }
+
+    setActiveCatId(catId);
+  }
+
+
   return (
     <div className='w-full h-full'>
         {openCategory && <Category handleButtonClick={handleButtonClick}/>}
@@ -44,7 +59,7 @@ const Sidebar: React.FC<SidebarProps> = ({setChosenID}) => {
         </div>
         <div className='bg-primary h-[92vh] dark:bg-[#292929]'>
             <div className='mx-[10%] pt-[7%] flex items-center'>
-                <h1 className='font-bold text-[#D3D3D3] text-[1.15em] mr-[7%] dark:white'>TASK CATEGORIES</h1>
+                <h1 className='font-bold text-[#D3D3D3] text-[1.15em] mr-[8%] dark:white'>TASK CATEGORIES</h1>
                 <FaPlus className='text-[#D3D3D3] text-[1.15em] hover:cursor-pointer hover:text-white dark:text-white dark:hover:text-gray-500' onClick={() => setOpenCategory(true)}/>
             </div>
 
@@ -59,7 +74,19 @@ const Sidebar: React.FC<SidebarProps> = ({setChosenID}) => {
                                 <FaCircle className='mr-[5%] text-[1.15em]' style={{ color: cat.color }}/>
                                 <p className={`text-[1.15em] text-white font-semibold ${cat.category_id == currID && 'dark:text-black'} `}>{cat.category_name}</p>
                             </div>
-                            <BsThreeDotsVertical className={`hover:animate-shake text-white ${cat.category_id == currID && 'dark:text-black'}`}/>
+                            <BsThreeDotsVertical className={`hover:animate-shake text-white ${cat.category_id == currID && 'dark:text-black'}`}
+                                onClick={()=>toggleOptions(cat.category_id)}/>
+                            {(activeCatId === cat.category_id) && showOptions &&
+                            <div className='animate-fade-in absolute bg-lightBlue ml-[11.2%] mt-[1%] rounded-[5px] text-[0.8em] w-[8%] ml-[1%] dark:bg-gray-500 z-0 drop-shadow-md'>
+                                <ul className='z-[250]'>
+                                    <li className='flex items-center py-[5%] pl-[6%] hover:bg-white hover:rounded-[5px] hover:cursor-pointer dark:text-white
+                                        dark:hover:bg-gray-600'>
+                                        <FaTrashAlt/>
+                                        <p className='ml-[3%]'>Delete Task</p>
+                                    </li>
+                                </ul>
+                            </div>
+                            }
                         </div>
                         </li>
                     ))}
