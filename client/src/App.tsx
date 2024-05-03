@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
+import axios from 'axios'
 
 import Sidebar from './components/sidebar/Sidebar'
 import Header from './components/header/Header';
@@ -9,20 +10,46 @@ import Edit from './components/modal/Edit';
 import Category from './components/modal/Category';
 
 import { FaClipboardList, FaSearch, FaPlus} from "react-icons/fa";
+import { LuArrowDownUp, LuArrowUpDown } from "react-icons/lu";
 import { BsThreeDots } from "react-icons/bs";
+import Icon from '@mdi/react';
+import { mdiSortCalendarAscending, mdiSortCalendarDescending } from '@mdi/js';
+
 import search from './assets/search.png'
+import config from './common/config';
 
 //We will use this ra since usa ra ato page hehe
 
 function App() {
   const [taskExist,setTaskExist] = useState(false);
   const [order,setOrder] = useState(false);
+  const [filter,setfilter] = useState('all');
   
   useEffect(()=>{
     //Change to see layout of no task and vice-versa
     setTaskExist(false);
-    console.log(order);
+    
+    if(filter=='all'){
+      getAllTasks();
+    }else if(filter=='pending'){
+      getPendingTasks()
+    }else{
+      getFinishedTasks()
+    }
+
   },[])
+
+  const getAllTasks = () =>{
+    axios.get(`${config.API}/task/retrieve`)
+  }
+
+  const getPendingTasks = () =>{
+
+  }
+
+  const getFinishedTasks = () =>{
+
+  }
 
   return (
     <div className="animate-fade-in font-montserrat">
@@ -41,11 +68,11 @@ function App() {
           <div className='bg-[#F3F3F3] h-[91.9vh]'>
               {/* First Section */}
               <div className='flex pt-[2%] pl-[3%]'>
-                <div className='flex items-center w-[58%]'>
+                <div className='flex items-center w-[57%]'>
                   <FaClipboardList className='text-[1.5em]'/>
                   <h1 className='text-[1.8em] font-medium pl-[0.5%]'>Task Board</h1>
                 </div>
-                <div className='flex w-[42%] relative'>
+                <div className='flex w-[43%] relative'>
                   <FaSearch className='text-[1.2em] absolute top-[26%] ml-[2%] text-[#707070]'/>
                   <input type="text" placeholder="Search Task Title or Description..." 
                   className='pl-[5%] w-[52%] border-2 rounded-[10px] mr-[1%]'/>
@@ -60,13 +87,13 @@ function App() {
                       </select>
                     </div>
                   </div>
-                  <button className='ml-[1%] bg-white border-[2px] rounded-[10px] px-[1%]'
+                  <button className='ml-[1%] bg-white border-[2px] rounded-[10px] px-[2%]'
                     onClick={() => { setOrder(prevOrder => !prevOrder) }}>
                     {order 
                     ?
-                    <h1 className='text-[#707070] font-bold'>A-Z</h1>
+                      <Icon className='animate-pop1 text-[#707070]' path={mdiSortCalendarAscending} size={1} />
                     :
-                    <h1 className='text-[#707070] font-bold'>Z-A</h1>
+                      <Icon className='animate-pop2 text-[#707070]' path={mdiSortCalendarDescending} size={1} />
                     }
                   </button>
                 </div>
