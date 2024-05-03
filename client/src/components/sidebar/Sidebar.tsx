@@ -2,24 +2,31 @@ import React,{useEffect, useState} from 'react'
 import logo from "../../assets/logo.png"
 import { FaPlus,FaCircle } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import Category from '../modal/Category';
 
 const Sidebar = () => {
   //Pag set lang ug interface diri Tyrone ako rani gi static for now
   const [catColor,setCatColor] = useState('');
+  const [openCategory, setOpenCategory] = useState(false);
   
   useEffect (()=>{
     setCatColor('#FFB703')
   },[])
 
+  const handleButtonClick = () => {
+    setOpenCategory(false);
+  }
+
   return (
     <div className='w-full h-full'>
-        <div className='bg-[#001A27] h-[8vh] rounded-tr-3xl dark:bg-black dark:border-b dark:border-white'>
+        {openCategory && <Category onCancel={handleButtonClick} onClose={handleButtonClick} onSubmit={handleButtonClick}/>}
+        <div className='bg-[#001A27] h-[8vh] rounded-tr-3xl dark:bg-black'>
             <img src={logo} alt="Produktib Logo" className="h-auto w-[15rem] py-[5%] pl-[10%]"></img>
         </div>
-        <div className='bg-[#023047] h-[92vh] dark:bg-black'>
+        <div className='bg-primary h-[92vh] dark:bg-black'>
             <div className='mx-[10%] pt-[7%] flex items-center'>
                 <h1 className='font-bold text-[#D3D3D3] text-[1.15em] mr-[7%] dark:text-gray-500'>TASK CATEGORIES</h1>
-                <FaPlus className='text-[#D3D3D3] text-[1.15em] hover:cursor-pointer hover:text-white dark:text-gray-500 dark:hover:text-white'/>
+                <FaPlus className='text-[#D3D3D3] text-[1.15em] hover:cursor-pointer hover:text-white dark:text-gray-500 dark:hover:text-white' onClick={() => setOpenCategory(true)}/>
             </div>
 
             {/* Category List */}

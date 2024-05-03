@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import { FaT, FaAlignLeft, FaAlignJustify } from "react-icons/fa6";
 
 
-const Add = () => {
+const Add = ({onSubmit, onCancel, onClose}) => {
 
     return(
-        <div className='fixed w-full h-full overflow-auto text-2xl z-2 backdrop-blur-sm'>
-            <div className='w-[50%] h-[60%] ml-[33%] mr-auto mt-[10%] mb-auto rounded-2xl z-1'>
+        <div className='absolute w-full h-full overflow-auto text-2xl z-2 backdrop-blur-sm'>
+            <div className='w-[50%] h-[60%] ml-[33%] mr-auto mt-[10%] mb-auto rounded-2xl z-100'>
                 <div className='flex w-full h-[20%] bg-[#023047] items-center rounded-2xl rounded-b-none dark:bg-black'>
                     <p className='text-white ml-[6%] text-4xl font-semibold '>Add Task</p>
                 </div>
@@ -28,8 +28,8 @@ const Add = () => {
                             <textarea id='description' className='w-full h-[8rem] p-2 pl-5 resize-none text-xl rounded-lg border-[#FFB703] border-2 dark:border-black' placeholder="Enter Task Description"></textarea>
                         </div>
                         <div className='flex justify-end'>
-                            <button className="bg-[#D6D6D6] text-[#023047] text-2xl font-bold py-2.5 px-2.5 rounded dark:border-black dark:bg-white dark:text-black">Cancel</button>
-                            <button type="submit" className="text-white ml-[3%] bg-[#FB8500] font-semibold py-2.5 px-6 rounded dark:bg-black">Save</button>
+                            <button className="bg-[#D6D6D6] text-[#023047] text-2xl font-bold py-2.5 px-2.5 rounded dark:border-black dark:bg-white dark:text-black" onClick={()=> onCancel()}>Cancel</button>
+                            <button type="submit" className="text-white ml-[3%] bg-[#FB8500] font-semibold py-2.5 px-6 rounded dark:bg-black" onClick={()=> onCancel()}>Save</button>
                         </div>
 
                     </form>
