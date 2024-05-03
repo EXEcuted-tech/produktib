@@ -5,7 +5,20 @@ export interface TaskCardProps {
     description:string;
     task_status: string;
     time_stamp: string;
+    isActive: boolean;
+    handleOptionsClick: (taskId: number) => void;
 }
+
+/*Ty pwede rani nimo gamiton*/
+export interface TaskProps {
+    task_id: number;
+    category_id: number;
+    title: string;
+    description:string;
+    task_status: string;
+    time_stamp: string;
+}
+
 
 export interface CatCardProps {
     category_id: number;

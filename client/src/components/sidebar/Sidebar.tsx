@@ -29,7 +29,7 @@ const Sidebar: React.FC<SidebarProps> = ({setChosenID}) => {
   }
 
   const handleCategorySelection = (categoryId:number) => {
-    console.log("Sidebar Value: ",categoryId);
+    // console.log("Sidebar Value: ",categoryId);
     localStorage.removeItem('category_id');
     setCurrID(categoryId);
     setChosenID(JSON.stringify(categoryId));

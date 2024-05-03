@@ -4,6 +4,7 @@ import { TbTextSize } from "react-icons/tb";
 import { GrTextAlignFull } from "react-icons/gr";
 import { FaRegCheckCircle } from "react-icons/fa";
 
+/*Ty pwede ra nimo gamiton ang TaskProps sa  interface.ts*/
 const View = () => {
   return (
     <div className='font-lato h-screen ml-[80%]'>

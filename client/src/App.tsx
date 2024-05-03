@@ -32,6 +32,7 @@ function App() {
   const [chosenID, setChosenID] = useState('1');
 
   const [openAddModal, setOpenAddModal] = useState(false);
+  const [activeTaskId, setActiveTaskId] = useState<number | null>(null);
 
   useEffect(()=>{
     if(filter=='all'){
@@ -45,6 +46,11 @@ function App() {
     }
 
   },[chosenID])
+
+  const handleOptionsClick = (taskId: number) => {
+    // console.log("From App: ",taskId);
+    setActiveTaskId(taskId);
+  };
 
   const getAllTasks = () =>{
     axios.get(`${config.API}/task/retrieve_all?col=category_id&val=${chosenID}&order=${order}`)
@@ -154,7 +160,7 @@ function App() {
                 {taskExist
                 ?(
                   tasks.map((task, index) => (
-                      <TaskCard key={index} {...task}/>
+                      <TaskCard key={index} {...task} handleOptionsClick={handleOptionsClick} isActive={activeTaskId === task.task_id}/>
                   ))
                 )
                 :
