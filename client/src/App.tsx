@@ -10,6 +10,7 @@ import Discard from './components/modal/Discard';
 import Delete from './components/modal/Delete';
 import Edit from './components/modal/Edit';
 import Category from './components/modal/Category';
+import View from './components/side pane/View Details';
 
 import { FaClipboardList, FaSearch, FaPlus} from "react-icons/fa";
 import { LuArrowDownUp, LuArrowUpDown } from "react-icons/lu";
@@ -27,24 +28,33 @@ import TaskCard from './components/card/TaskCard';
 function App() {
   const [taskExist,setTaskExist] = useState(false);
   const [order,setOrder] = useState('ASC');
-  const [filter,setfilter] = useState('all');
+  const [filter,setFilter] = useState('all');
   const [tasks,setTasks] = useState<TaskCardProps[]>([])
   const [chosenID, setChosenID] = useState('1');
 
   const [openAddModal, setOpenAddModal] = useState(false);
+  const [activeTaskId, setActiveTaskId] = useState<number | null>(null);
+  const [showView,setShowView] = useState(false);
+  const [showEdit,setShowEdit] = useState(false);
+  const [showDelete,setShowDelete] = useState(false);
 
   useEffect(()=>{
     if(filter=='all'){
       getAllTasks();
     }else if(filter=='pending'){
+      //console.log("Went in here");
       getPendingTasks()
     }else if(filter=='inprogress'){
-
+      getProgressTasks()
     }else{
       getFinishedTasks()
     }
+  },[chosenID,filter])
 
-  },[chosenID])
+  const handleOptionsClick = (taskId: number) => {
+    // console.log("From App: ",taskId);
+    setActiveTaskId(taskId);
+  };
 
   const getAllTasks = () =>{
     axios.get(`${config.API}/task/retrieve_all?col=category_id&val=${chosenID}&order=${order}`)
@@ -62,28 +72,70 @@ function App() {
   }
 
   const getPendingTasks = () =>{
+    axios.get(`${config.API}/task/retrieve?col1=category_id&val1=${chosenID}&col2=task_status&val2=Not Started&order=${order}`)
+    .then((res)=>{
+      if(res.data.success==true && res.data.tasks.length > 0){
+        setTaskExist(true);
+        setTasks(res.data.tasks);
+      }else {
+        setTaskExist(false);
+        setTasks([]);
+      }
+    }).catch((error)=>{
 
+    })
+  }
+
+  const getProgressTasks = () =>{
+    axios.get(`${config.API}/task/retrieve?col1=category_id&val1=${chosenID}&col2=task_status&val2=In Progress&order=${order}`)
+    .then((res)=>{
+      if(res.data.success==true && res.data.tasks.length > 0){
+        setTaskExist(true);
+        setTasks(res.data.tasks);
+      }else {
+        setTaskExist(false);
+        setTasks([]);
+      }
+    }).catch((error)=>{
+
+    })
   }
 
   const getFinishedTasks = () =>{
+    axios.get(`${config.API}/task/retrieve?col1=category_id&val1=${chosenID}&col2=task_status&val2=Completed&order=${order}`)
+    .then((res)=>{
+      if(res.data.success==true && res.data.tasks.length > 0){
+        setTaskExist(true);
+        setTasks(res.data.tasks);
+      }else {
+        setTaskExist(false);
+        setTasks([]);
+      }
+    }).catch((error)=>{
 
+    })
   }
 
   const handleButtonClick = () => {
+    setActiveTaskId(0);
     setOpenAddModal(false);
+    setShowView(false);
+    setShowEdit(false);
+    setShowDelete(false);
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) =>{
+    console.log(e.target.value);
+    setFilter(e.target.value);
   }
 
   return (
     <div className="animate-fade-in font-montserrat">
-        {/*uncomment to view modal ui
-          <Edit/>
-          <Category/>
-          <Discard />
-          <Delete />
-        */}
-      {openAddModal && (<Add onCancel={handleButtonClick} onClose={handleButtonClick} onSubmit={handleButtonClick}></Add>)}
-
-      <div className='flex'>
+      {openAddModal && (<Add onCancel={handleButtonClick} onSubmit={handleButtonClick}></Add>)}
+      {showView && <View onClose={handleButtonClick}/>}
+        {showEdit && <Edit onClose={handleButtonClick}/>}
+        {showDelete && <Delete onClose={handleButtonClick}/>}
+      <div className='flex z-0'>
         <div className='w-[14%] dark:bg-black'>
           <Sidebar setChosenID={setChosenID}/>
         </div>
@@ -102,8 +154,9 @@ function App() {
                   className='pl-[5%] w-[52%] border-2 rounded-[10px] mr-[1%]'></input>
                   <div className='flex w-[28%] bg-white border-2 rounded-[10px] relative'>
                     <h1 className='absolute top-[23%] pl-[5%] font-semibold'>Show:</h1>
-                    <div className='pl-[35%] py-[5%]'>
-                      <select className='text-[#707070] outline-none'>
+                    <div className='pl-[32%] py-[6%]'>
+                      <select className='text-[#707070] focus:outline-none outline-none' 
+                        value={filter} onChange={(e)=>handleChange(e)}>
                         <option value="all">All</option>
                         <option value="pending">Not Started</option>
                         <option value="inprogress">In Progress</option>
@@ -154,7 +207,9 @@ function App() {
                 {taskExist
                 ?(
                   tasks.map((task, index) => (
-                      <TaskCard key={index} {...task}/>
+                      <TaskCard key={index} {...task} handleOptionsClick={handleOptionsClick} 
+                                isActive={activeTaskId === task.task_id} setShowView={setShowView}
+                                setShowEdit={setShowEdit} setShowDelete={setShowDelete}/>
                   ))
                 )
                 :
