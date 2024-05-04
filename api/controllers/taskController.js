@@ -10,12 +10,13 @@ const updateTask = (req,res)=>{
 }
 
 const deleteTask = (req,res)=>{
-  const {val} = req.query;
-  const query = `DELETE FROM task WHERE id = ?`
 
-  db.query(query,[val],(err, rows)=>{
+  const {task_id} = req.body;
+  const query = `DELETE FROM task WHERE task_id = ?`
+
+  db.query(query,[task_id],(err, rows)=>{
     if(err){
-      console.error(`Error deleting record with ID:${val}`, err);
+      console.error(`Error deleting record with ID:${task_id}`, err);
       return res.status(500).json({status: 500, success:false, error: 'Error Deleting Task'});
     }else{
       return res.status(200).json({
