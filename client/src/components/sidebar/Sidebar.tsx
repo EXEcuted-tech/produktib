@@ -34,9 +34,10 @@ const Sidebar: React.FC<SidebarProps> = ({setChosenID}) => {
     setOpenEditCategory(false);
   }
 
-  const handleCatDropdown = () =>{
+  const handleCatDropdown = (catId:number) =>{
     setOpenEditCategory(true);
     setShowOptions(false);
+    localStorage.setItem('cat_id',JSON.stringify(catId));
   }
 
   const handleCategorySelection = (categoryId:number) => {
@@ -89,7 +90,7 @@ const Sidebar: React.FC<SidebarProps> = ({setChosenID}) => {
                             <div className='animate-fade-in absolute bg-lightBlue ml-[11.2%] mt-[3%] rounded-[5px] text-[0.8em] w-[8%] ml-[1%] dark:bg-gray-500 z-0 drop-shadow-md'>
                                 <ul className='z-[250]'>
                                     <li className='flex items-center py-[5%] pl-[6%] hover:bg-white hover:rounded-[5px] hover:cursor-pointer dark:text-white
-                                        dark:hover:bg-gray-600' onClick={handleCatDropdown}>
+                                        dark:hover:bg-gray-600' onClick={()=>handleCatDropdown(cat.category_id)}>
                                         <FaPencilAlt/>
                                         <p className='ml-[3%]'>Edit Category</p>
                                     </li>

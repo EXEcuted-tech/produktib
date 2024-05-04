@@ -3,7 +3,7 @@ import React from "react";
 
 const Discard = ({onCancel,onClose}) => {
   return (
-    <div className="fixed inset-0 backdrop-brightness-50 flex items-center justify-center p-4 z-[500]">
+    <div className="animate-fade-in fixed inset-0 backdrop-brightness-50 flex items-center justify-center p-4 z-[500]">
       <div className="bg-white rounded-lg shadow-md ml-[16%] overflow-hidden w-full max-w-sm font-montserrat">
         {/* Title and Description */}
         <section className="p-4">

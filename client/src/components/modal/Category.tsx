@@ -33,7 +33,7 @@ const colorPickerRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className='absolute font-montserrat z-[250]'>
-        <div className='z-0 absolute top-0 left-0 bg-[rgba(0,0,0,0.1)] w-[100vw] h-[100vh] backdrop-brightness-50'>
+        <div className='animate-fade-in z-0 absolute top-0 left-0 bg-[rgba(0,0,0,0.1)] w-[100vw] h-[100vh] backdrop-brightness-50'>
             <div className='w-[50%] h-[55%] rounded-2xl shadow-xl bg-white mt-[10%] mb-auto ml-[33%] mr-auto justify-center'>
                 <div className='flex w-full h-[20%] bg-[#023047] items-center rounded-2xl rounded-b-none dark:bg-black'>
                     <p className='text-white w-[90%] text-4xl font-bold pl-[4%]'>Add Task Category</p>
@@ -50,7 +50,7 @@ const colorPickerRef = useRef<HTMLDivElement>(null);
                     <div className='ml-[8%] text-[1.2em] font-semibold mt-[1%]'>
                         <input 
                             type="text"
-                            className='w-[85%] p-4 pl-5 rounded-xl bg-white border-[3px] border-[#FFB703] text-2xl
+                            className='w-[92%] p-4 pl-5 rounded-xl bg-white border-[3px] border-[#FFB703] text-2xl
                             placeholder-gray-500 placeholder:font-bold font-bold'
                             placeholder="Enter Category Name">
                         </input>
