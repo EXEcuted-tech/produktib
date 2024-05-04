@@ -61,13 +61,24 @@ module.exports = {
           '100%': {
             transform: 'scale(1)',
           }
-        }
+        },
+
+        'slide-left': {
+          '0%': {
+            transform: 'translateX(100%)',
+          },
+          '100%': {
+            transform: 'translateX(0)',
+          },
+        },
+
       },
       animation: {
         'pop1': 'pop1 0.5s cubic-bezier(0.47, 2.02, 0.31, -0.36)',
         'pop2': 'pop2 0.5s cubic-bezier(0.47, 2.02, 0.31, -0.36)',
         'fade-in': 'fade-in 0.5s ease-in-out',
         'shake': 'shake 0.9s cubic-bezier(0.04, 0.04, 0.04, 0.04)',
+        'slide-left': 'slide-left 0.5s ease-out',
       },
     },
   },

@@ -2,15 +2,20 @@ import React,{useEffect, useRef, useState} from 'react'
 import axios from 'axios';
 import config from '../../common/config';
 import logo from "../../assets/logo.png"
-import { FaPlus,FaCircle } from "react-icons/fa";
+import { FaPlus,FaCircle, FaTrashAlt, FaPencilAlt } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Category from '../modal/Category';
+import EditCategory from '../modal/EditCategory';
 import { CatCardProps,SidebarProps } from '../../common/interface';
 
 const Sidebar: React.FC<SidebarProps> = ({setChosenID}) => {
   const [category,setCategory] = useState<CatCardProps[]>([])
   const [currID,setCurrID] = useState(1);
   const [openCategory, setOpenCategory] = useState(false);
+  const [openEditCategory, setOpenEditCategory] = useState(false);
+
+  const [showOptions, setShowOptions] = useState(false);
+  const [activeCatId, setActiveCatId] = useState<number | null>(null);
 
   useEffect (()=>{
     axios.get(`${config.API}/category/retrieve_all`)
@@ -26,19 +31,39 @@ const Sidebar: React.FC<SidebarProps> = ({setChosenID}) => {
 
   const handleButtonClick = () => {
     setOpenCategory(false);
+    setOpenEditCategory(false);
+  }
+
+  const handleCatDropdown = (catId:number) =>{
+    setOpenEditCategory(true);
+    setShowOptions(false);
+    localStorage.setItem('cat_id',JSON.stringify(catId));
   }
 
   const handleCategorySelection = (categoryId:number) => {
-    console.log("Sidebar Value: ",categoryId);
+    // console.log("Sidebar Value: ",categoryId);
     localStorage.removeItem('category_id');
     setCurrID(categoryId);
     setChosenID(JSON.stringify(categoryId));
     localStorage.setItem('category_id', JSON.stringify(categoryId));
   }
 
+  const toggleOptions = (catId:number) =>{
+
+    if(activeCatId === catId){
+        setShowOptions(!showOptions);
+    }else{
+        setShowOptions(true);
+    }
+
+    setActiveCatId(catId);
+  }
+
+
   return (
     <div className='w-full h-full'>
-        {openCategory && <Category onButtonClick={handleButtonClick}/>}
+        {openCategory && <Category handleButtonClick={handleButtonClick}/>}
+        {openEditCategory && <EditCategory handleButtonClick={handleButtonClick}/>}
         <div className='bg-[#001A27] h-[8vh] rounded-tr-3xl dark:bg-[#1c1c1c]'>
             <img src={logo} alt="Produktib Logo" className="h-auto w-[15rem] py-[5%] pl-[10%]"></img>
         </div>
@@ -59,7 +84,24 @@ const Sidebar: React.FC<SidebarProps> = ({setChosenID}) => {
                                 <FaCircle className='mr-[5%] text-[1.15em]' style={{ color: cat.color }}/>
                                 <p className={`text-[1.15em] text-white font-semibold ${cat.category_id == currID && 'dark:text-black'} `}>{cat.category_name}</p>
                             </div>
-                            <BsThreeDotsVertical className={`hover:animate-shake text-white ${cat.category_id == currID && 'dark:text-black'}`}/>
+                            <BsThreeDotsVertical className={`hover:animate-shake text-white ${cat.category_id == currID && 'dark:text-black'}`}
+                                onClick={()=>toggleOptions(cat.category_id)}/>
+                            {(activeCatId === cat.category_id) && showOptions &&
+                            <div className='animate-fade-in absolute bg-lightBlue ml-[11.2%] mt-[3%] rounded-[5px] text-[0.8em] w-[8%] ml-[1%] dark:bg-gray-500 z-0 drop-shadow-md'>
+                                <ul className='z-[250]'>
+                                    <li className='flex items-center py-[5%] pl-[6%] hover:bg-white hover:rounded-[5px] hover:cursor-pointer dark:text-white
+                                        dark:hover:bg-gray-600' onClick={()=>handleCatDropdown(cat.category_id)}>
+                                        <FaPencilAlt/>
+                                        <p className='ml-[3%]'>Edit Category</p>
+                                    </li>
+                                    <li className='flex items-center py-[5%] pl-[6%] hover:bg-white hover:rounded-[5px] hover:cursor-pointer dark:text-white
+                                        dark:hover:bg-gray-600'>
+                                        <FaTrashAlt/>
+                                        <p className='ml-[3%]'>Delete Category</p>
+                                    </li>
+                                </ul>
+                            </div>
+                            }
                         </div>
                         </li>
                     ))}

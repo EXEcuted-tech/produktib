@@ -31,7 +31,21 @@ const retrieveAll = (req,res)=>{
 }
 
 const retrieveByParams = (req,res)=>{
+  const {col,val}=req.query;
+  const retrieveCategory = `SELECT * FROM category WHERE ??=?`
 
+  db.query(retrieveCategory,[col,val],(err, row) => {
+    if (err) {
+      console.error('Error retrieving record:', err);
+      return res.status(500).json({ status: 500, success:false,error: 'Error retrieving record' });
+    }else{
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        category: row,
+      });
+    }
+  });
 }
 
 
