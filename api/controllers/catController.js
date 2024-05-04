@@ -2,7 +2,7 @@ const express = require('express');
 const db = require('./a_db'); 
 
 const createCategory = (req,res)=>{
-
+  
 }
 
 const updateCategory = (req,res)=>{
