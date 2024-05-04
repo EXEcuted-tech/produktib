@@ -17,7 +17,7 @@ const Edit = ({onClose}) => {
         {showDiscard && <Discard onClose={onClose} onCancel={handleCancel}/>}
         <div className='z-0 animate-fade-in absolute top-0 left-0 bg-[rgba(0,0,0,0.1)] w-[100vw] h-[100vh] backdrop-brightness-50'>
             <div className='h-[70%] w-[50%] rounded-2xl shadow-xl bg-white ml-[32%] mt-[7%] justify-center'>
-                <div className='h-[15%] w-full bg-[#023047] rounded-t-lg flex items-center'>
+                <div className='h-[15%] w-full bg-[#023047] rounded-t-lg flex items-center dark:bg-black'>
                     <p className='text-white w-[84%] ml-[6%] text-[2em] font-bold '>Edit Task</p>
                     <IoCloseOutline className='hover:animate-shake text-white text-[3em] hover:text-gray-300 hover:cursor-pointer'
                        onClick={()=> onClose()}/>

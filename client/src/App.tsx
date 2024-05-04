@@ -28,7 +28,7 @@ import TaskCard from './components/card/TaskCard';
 function App() {
   const [taskExist,setTaskExist] = useState(false);
   const [order,setOrder] = useState('ASC');
-  const [filter,setfilter] = useState('all');
+  const [filter,setFilter] = useState('all');
   const [tasks,setTasks] = useState<TaskCardProps[]>([])
   const [chosenID, setChosenID] = useState('1');
 
@@ -42,14 +42,14 @@ function App() {
     if(filter=='all'){
       getAllTasks();
     }else if(filter=='pending'){
+      //console.log("Went in here");
       getPendingTasks()
     }else if(filter=='inprogress'){
-
+      getProgressTasks()
     }else{
       getFinishedTasks()
     }
-
-  },[chosenID])
+  },[chosenID,filter])
 
   const handleOptionsClick = (taskId: number) => {
     // console.log("From App: ",taskId);
@@ -72,11 +72,48 @@ function App() {
   }
 
   const getPendingTasks = () =>{
+    axios.get(`${config.API}/task/retrieve?col1=category_id&val1=${chosenID}&col2=task_status&val2=Not Started&order=${order}`)
+    .then((res)=>{
+      if(res.data.success==true && res.data.tasks.length > 0){
+        setTaskExist(true);
+        setTasks(res.data.tasks);
+      }else {
+        setTaskExist(false);
+        setTasks([]);
+      }
+    }).catch((error)=>{
 
+    })
+  }
+
+  const getProgressTasks = () =>{
+    axios.get(`${config.API}/task/retrieve?col1=category_id&val1=${chosenID}&col2=task_status&val2=In Progress&order=${order}`)
+    .then((res)=>{
+      if(res.data.success==true && res.data.tasks.length > 0){
+        setTaskExist(true);
+        setTasks(res.data.tasks);
+      }else {
+        setTaskExist(false);
+        setTasks([]);
+      }
+    }).catch((error)=>{
+
+    })
   }
 
   const getFinishedTasks = () =>{
+    axios.get(`${config.API}/task/retrieve?col1=category_id&val1=${chosenID}&col2=task_status&val2=Completed&order=${order}`)
+    .then((res)=>{
+      if(res.data.success==true && res.data.tasks.length > 0){
+        setTaskExist(true);
+        setTasks(res.data.tasks);
+      }else {
+        setTaskExist(false);
+        setTasks([]);
+      }
+    }).catch((error)=>{
 
+    })
   }
 
   const handleButtonClick = () => {
@@ -85,6 +122,11 @@ function App() {
     setShowView(false);
     setShowEdit(false);
     setShowDelete(false);
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) =>{
+    console.log(e.target.value);
+    setFilter(e.target.value);
   }
 
   return (
@@ -112,8 +154,9 @@ function App() {
                   className='pl-[5%] w-[52%] border-2 rounded-[10px] mr-[1%]'></input>
                   <div className='flex w-[28%] bg-white border-2 rounded-[10px] relative'>
                     <h1 className='absolute top-[23%] pl-[5%] font-semibold'>Show:</h1>
-                    <div className='pl-[35%] py-[5%]'>
-                      <select className='text-[#707070] outline-none'>
+                    <div className='pl-[32%] py-[6%]'>
+                      <select className='text-[#707070] focus:outline-none outline-none' 
+                        value={filter} onChange={(e)=>handleChange(e)}>
                         <option value="all">All</option>
                         <option value="pending">Not Started</option>
                         <option value="inprogress">In Progress</option>
