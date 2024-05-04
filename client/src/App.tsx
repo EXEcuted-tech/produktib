@@ -10,6 +10,7 @@ import Discard from './components/modal/Discard';
 import Delete from './components/modal/Delete';
 import Edit from './components/modal/Edit';
 import Category from './components/modal/Category';
+import View from './components/side pane/View Details';
 
 import { FaClipboardList, FaSearch, FaPlus} from "react-icons/fa";
 import { LuArrowDownUp, LuArrowUpDown } from "react-icons/lu";
@@ -33,6 +34,9 @@ function App() {
 
   const [openAddModal, setOpenAddModal] = useState(false);
   const [activeTaskId, setActiveTaskId] = useState<number | null>(null);
+  const [showView,setShowView] = useState(false);
+  const [showEdit,setShowEdit] = useState(false);
+  const [showDelete,setShowDelete] = useState(false);
 
   useEffect(()=>{
     if(filter=='all'){
@@ -76,19 +80,19 @@ function App() {
   }
 
   const handleButtonClick = () => {
+    setActiveTaskId(0);
     setOpenAddModal(false);
+    setShowView(false);
+    setShowEdit(false);
+    setShowDelete(false);
   }
 
   return (
     <div className="animate-fade-in font-montserrat">
-        {/*uncomment to view modal ui
-          <Edit/>
-          <Category/>
-          <Discard />
-          <Delete />
-        */}
       {openAddModal && (<Add onCancel={handleButtonClick} onSubmit={handleButtonClick}></Add>)}
-
+      {showView && <View onClose={handleButtonClick}/>}
+        {showEdit && <Edit onClose={handleButtonClick}/>}
+        {showDelete && <Delete onClose={handleButtonClick}/>}
       <div className='flex z-0'>
         <div className='w-[14%] dark:bg-black'>
           <Sidebar setChosenID={setChosenID}/>
@@ -160,7 +164,9 @@ function App() {
                 {taskExist
                 ?(
                   tasks.map((task, index) => (
-                      <TaskCard key={index} {...task} handleOptionsClick={handleOptionsClick} isActive={activeTaskId === task.task_id}/>
+                      <TaskCard key={index} {...task} handleOptionsClick={handleOptionsClick} 
+                                isActive={activeTaskId === task.task_id} setShowView={setShowView}
+                                setShowEdit={setShowEdit} setShowDelete={setShowDelete}/>
                   ))
                 )
                 :

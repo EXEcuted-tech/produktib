@@ -69,7 +69,7 @@ const Sidebar: React.FC<SidebarProps> = ({setChosenID}) => {
         </div>
         <div className='bg-primary h-[92vh] dark:bg-[#292929]'>
             <div className='mx-[10%] pt-[7%] flex items-center'>
-                <h1 className='font-bold text-[#D3D3D3] text-[1.15em] mr-[8%] dark:white'>TASK CATEGORIES</h1>
+                <h1 className='font-bold text-[#D3D3D3] text-[1.15em] mr-[7%] dark:white'>TASK CATEGORIES</h1>
                 <FaPlus className='text-[#D3D3D3] text-[1.15em] hover:cursor-pointer hover:text-white dark:text-white dark:hover:text-gray-500' onClick={() => setOpenCategory(true)}/>
             </div>
 
