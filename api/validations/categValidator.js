@@ -1,3 +1,7 @@
+function isNumeric(value) {
+    return !isNaN(parseFloat(value)) && isFinite(value);
+  }
+
 const createCatValidator = (req,res,next)=>{
 
 }

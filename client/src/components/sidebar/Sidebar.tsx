@@ -59,6 +59,18 @@ const Sidebar: React.FC<SidebarProps> = ({setChosenID}) => {
     setActiveCatId(catId);
   }
 
+  const handleClick = (category_id) =>{
+    console.log("CATEGORY ID BEH: ", category_id);
+    axios.post(`${config.API}/category/delete`,{
+      category_id:category_id
+    }).then((res)=>{
+      if(res.status != 200){
+        console.error("FAILED TO DELETE", res)
+      }
+      window.location.reload();
+    })
+  }
+
 
   return (
     <div className='w-full h-full'>
@@ -92,12 +104,17 @@ const Sidebar: React.FC<SidebarProps> = ({setChosenID}) => {
                                     <li className='flex items-center py-[5%] pl-[6%] hover:bg-white hover:rounded-[5px] hover:cursor-pointer dark:text-white
                                         dark:hover:bg-gray-600' onClick={()=>handleCatDropdown(cat.category_id)}>
                                         <FaPencilAlt/>
-                                        <p className='ml-[3%]'>Edit Category</p>
+                                        <button className='flex items-center '>
+                                        <p className='ml-[0.5rem]'>Edit Category</p>
+                                        </button>
                                     </li>
                                     <li className='flex items-center py-[5%] pl-[6%] hover:bg-white hover:rounded-[5px] hover:cursor-pointer dark:text-white
                                         dark:hover:bg-gray-600'>
+                                          <button className='flex items-center' onClick={()=>{handleClick(cat.category_id)}}>
+
                                         <FaTrashAlt/>
-                                        <p className='ml-[3%]'>Delete Category</p>
+                                        <p className='ml-[0.5rem]'>Delete Category</p>
+                                        </button>
                                     </li>
                                 </ul>
                             </div>

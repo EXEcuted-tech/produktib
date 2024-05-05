@@ -1,9 +1,31 @@
-import React from "react";
+import React, { useState, CSSProperties } from "react";
 import { FiX } from "react-icons/fi";
+import BounceLoader from "react-spinners/ClipLoader";
 import { GoAlertFill } from "react-icons/go";
+import axios from "axios";
+import config from "../../common/config";
 /* Modify this Component to add functionalities */
 
 const Delete = ({onClose}) => {
+  const [taskId, setTaskId] =useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  
+  const handleClick = ()=>{
+    const id = localStorage.getItem('task_id');
+    setTaskId(id);
+    setLoading(true);
+    
+    axios.post(`${config.API}/task/delete`,{
+      task_id:id
+    }).then((res)=>{
+      if(res.status !== 200){
+        console.log('error', res)
+      }
+
+      window.location.reload();
+    })
+  }
+  
   return (
     <div className="absolute z-[150] inset-0 backdrop-brightness-50 flex items-center justify-center">
       <div className="absolute z-[150] ml-[15%] bg-white rounded-lg shadow-md overflow-hidden w-full max-w-sm font-montserrat">
@@ -33,8 +55,12 @@ const Delete = ({onClose}) => {
           onClick={onClose}>
             Cancel
           </button>
-          <button className="button bg-alert text-white p-[0.5em] w-[30%] rounded-md hover:bg-red-400 font-bold transition-colors delay-250 duration-[3000] ease-in">
+          <button onClick={handleClick} className="button bg-alert text-white p-[0.5em] w-[30%] rounded-md hover:bg-red-400 font-bold transition-colors delay-250 duration-[3000] ease-in">
+       <div className="flex justify-evenly items-center duration-100">     
+    <BounceLoader color="#FFFFFF" 
+          loading={loading} />
             Delete
+            </div>
           </button>
         </section>
 
