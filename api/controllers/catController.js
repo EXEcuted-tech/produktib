@@ -53,22 +53,18 @@ const updateCategory = (req, res) => {
 
 
 const deleteCategory = (req,res)=>{
-  const {category_id} = req.body
-  const deleteCategory = 'DELETE FROM category WHERE category_id = ?'
-  
-  db.query(deleteCategory,[category_id],(err, result) =>{
-    if (err){
-      console.error('Error deleting data:', err)
-      return res.status(500).json({
-        status: 500,
-        success: false,
-        error: "Error deleting data"
-      })
+  const {category_id} = req.body;
+  const query = `DELETE FROM category WHERE category_id = ?`
+
+  db.query(query,[category_id],(err, rows)=>{
+    if(err){
+      console.error(`Error deleting record with ID:${category_id}`, err);
+      return res.status(500).json({status: 500, success:false, error: 'Error Deleting Category'});
     }else{
       return res.status(200).json({
         status: 200,
         success: true,
-        data: result.affectedRows
+        message: 'Successfully Deleted Category'
       })
     }
   })

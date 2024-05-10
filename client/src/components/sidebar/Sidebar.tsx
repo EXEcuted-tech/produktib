@@ -59,6 +59,20 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
     setActiveCatId(catId);
   };
 
+  const handleClick = (category_id) => {
+    console.log("CATEGORY ID BEH: ", category_id);
+    axios
+      .post(`${config.API}/category/delete`, {
+        category_id: category_id,
+      })
+      .then((res) => {
+        if (res.status != 200) {
+          console.error("FAILED TO DELETE", res);
+        }
+        window.location.reload();
+      });
+  };
+
   return (
     <div className="w-full h-full">
       {openCategory && <Category handleButtonClick={handleButtonClick} />}
