@@ -7,10 +7,14 @@ import axios from "axios";
 import config from "../../common/config";
 
 const Edit = ({ onClose }) => {
+  const [taskId, setTaskId] = useState<string | null>(null);
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDesc, setTaskDesc] = useState("");
   const [taskStatus, setTaskStatus] = useState("");
   const [showDiscard, setShowDiscard] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  setLoading(true);
 
   const handleCancel = () => {
     setShowDiscard(false);
@@ -18,23 +22,9 @@ const Edit = ({ onClose }) => {
 
   const catID = localStorage.getItem("category_id");
   const taskID = localStorage.getItem("task_id");
+  setTaskId(taskID);
 
-  useEffect(() => {
-    axios
-      .get(
-        `${config.API}/task/retrieve?col1=category_id&val1=${catID}&col2=task_id&val2=${taskID}&order=DESC`
-      )
-      .then((res) => {
-        console.log("Response: ", res);
-        if (res.data.success == true) {
-          console.log("Task Identifier:", res.data.category[0].task_id);
-          setTaskTitle(res.data.tasks[0].title);
-          setTaskDesc(res.data.tasks[0].description);
-          setTaskStatus(res.data.tasks[0].task_status);
-        }
-      })
-      .catch((err) => {});
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <div className="absolute font-montserrat z-[250]">
