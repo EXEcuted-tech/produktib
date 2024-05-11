@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { FaMoon, FaRegMoon } from "react-icons/fa";
 import Add from "./components/modal/Add";
 import axios from "axios";
 
 import Sidebar from "./components/sidebar/Sidebar";
 import Header from "./components/header/Header";
-import Discard from "./components/modal/Discard";
 import Delete from "./components/modal/Delete";
 import Edit from "./components/modal/Edit";
-import Category from "./components/modal/Category";
 import View from "./components/side pane/View Details";
 
 import { FaClipboardList, FaSearch, FaPlus } from "react-icons/fa";
-import { LuArrowDownUp, LuArrowUpDown } from "react-icons/lu";
 import { BsThreeDots } from "react-icons/bs";
 import Icon from "@mdi/react";
 import { mdiSortCalendarAscending, mdiSortCalendarDescending } from "@mdi/js";
@@ -22,6 +18,9 @@ import search from "./assets/search.png";
 import config from "./common/config";
 import { TaskCardProps } from "./common/interface";
 import TaskCard from "./components/card/TaskCard";
+import GenSpinner from "./components/loaders/genSpinner";
+import UserNotification from "./components/alerts/Notification";
+import { AiFillExclamationCircle } from "react-icons/ai";
 
 //We will use this ra since usa ra ato page hehe
 
@@ -30,30 +29,36 @@ function App() {
   const [order, setOrder] = useState("ASC");
   const [filter, setFilter] = useState("all");
   const [tasks, setTasks] = useState<TaskCardProps[]>([]);
-  const [chosenID, setChosenID] = useState("1");
-  const [currTaskId, setCurrTaskId] = useState("1");
-
+  const [chosenID, setChosenID] = useState(localStorage.getItem("category_id")!=="0" ? localStorage.getItem("category_id") : "1");
+  const [loadingPage, setLoadingPage] = useState(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [openAddModal, setOpenAddModal] = useState(false);
   const [activeTaskId, setActiveTaskId] = useState<number | null>(null);
   const [showView, setShowView] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
+  const [errMess,setErrMess] = useState("");
 
   useEffect(() => {
-    if (filter == "all") {
+    console.log("Category ID! ", chosenID);
+    if (filter === "all") {
       getAllTasks();
-    } else if (filter == "pending") {
-      //console.log("Went in here");
+    } else if (filter === "pending") {
       getPendingTasks();
-    } else if (filter == "inprogress") {
+    } else if (filter === "inprogress") {
       getProgressTasks();
     } else {
       getFinishedTasks();
     }
-  }, [chosenID, filter]);
+  }, [chosenID, filter, order,loadingPage]);
+
+
+  // useEffect(()=>{
+  //   console.log("Loading: ",loadingPage)
+  // },[])
 
   const handleOptionsClick = (taskId: number) => {
-    console.log("Task ID: ", taskId);
+    //console.log("Task ID: ", taskId);
     setActiveTaskId(taskId);
     localStorage.setItem("task_id", JSON.stringify(activeTaskId));
   };
@@ -64,7 +69,7 @@ function App() {
         `${config.API}/task/retrieve_all?col=category_id&val=${chosenID}&order=${order}`
       )
       .then((res) => {
-        if (res.data.success == true && res.data.tasks.length > 0) {
+        if (res.data.success === true && res.data.tasks.length > 0) {
           setTaskExist(true);
           setTasks(res.data.tasks);
         } else {
@@ -72,7 +77,10 @@ function App() {
           setTasks([]);
         }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        error.response? setErrMess(error.response?.data.message): setErrMess("Request Failed!");
+        errorTimer();
+      });
   };
 
   const getPendingTasks = () => {
@@ -81,7 +89,7 @@ function App() {
         `${config.API}/task/retrieve?col1=category_id&val1=${chosenID}&col2=task_status&val2=Not Started&order=${order}`
       )
       .then((res) => {
-        if (res.data.success == true && res.data.tasks.length > 0) {
+        if (res.data.success === true && res.data.tasks.length > 0) {
           setTaskExist(true);
           setTasks(res.data.tasks);
         } else {
@@ -89,24 +97,32 @@ function App() {
           setTasks([]);
         }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        error.response? setErrMess(error.response?.data.message): setErrMess("Request Failed!");
+        errorTimer();
+      });
   };
 
   const getProgressTasks = () => {
     axios
-      .get(
-        `${config.API}/task/retrieve?col1=category_id&val1=${chosenID}&col2=task_status&val2=In Progress&order=${order}`
-      )
-      .then((res) => {
-        if (res.data.success == true && res.data.tasks.length > 0) {
-          setTaskExist(true);
-          setTasks(res.data.tasks);
-        } else {
-          setTaskExist(false);
-          setTasks([]);
-        }
-      })
-      .catch((error) => {});
+    .get(
+      `${config.API}/task/retrieve?col1=category_id&val1=${chosenID}&col2=task_status&val2=In Progress&order=${order}`
+    )
+    .then((res) => {
+      if (res.data.success === true && res.data.tasks.length > 0) {
+        setTaskExist(true);
+        setTasks(res.data.tasks);
+      } else {
+        setTaskExist(false);
+        setTasks([]);
+      }
+    })
+    .catch((error) => {
+      error.response? setErrMess(error.response?.data.message): setErrMess("Request Failed!");
+      errorTimer();
+    });
+    
+    
   };
 
   const getFinishedTasks = () => {
@@ -115,7 +131,7 @@ function App() {
         `${config.API}/task/retrieve?col1=category_id&val1=${chosenID}&col2=task_status&val2=Completed&order=${order}`
       )
       .then((res) => {
-        if (res.data.success == true && res.data.tasks.length > 0) {
+        if (res.data.success === true && res.data.tasks.length > 0) {
           setTaskExist(true);
           setTasks(res.data.tasks);
         } else {
@@ -123,7 +139,10 @@ function App() {
           setTasks([]);
         }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        error.response? setErrMess(error.response?.data.message): setErrMess("Request Failed!");
+        errorTimer();
+      });
   };
 
   const handleButtonClick = () => {
@@ -132,29 +151,84 @@ function App() {
     setShowView(false);
     setShowEdit(false);
     setShowDelete(false);
+    //console.log(localStorage.getItem("category_id"));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    console.log(e.target.value);
+    //console.log(e.target.value);
     setFilter(e.target.value);
   };
 
+  const handleChangeSearch = (e) => {
+    console.log(e.target.value)
+    setSearchQuery(e.target.value)
+    if(e.target.value){
+    axios.get(
+      `${config.API}/task/retrievelike`,{
+        params:{  
+          col1: 'category_id',
+          val1: `${chosenID}`,
+          col2: ['title', 'description'],
+          val2: searchQuery,
+          order: `${order}`
+      }
+    }
+    ).then(response =>{
+      if(response.status === 200){
+        if(response.data.tasks.length === 0){
+          setTasks(response.data.tasks)
+          setErrMess("No Results Found");
+        }
+        //console.log(response.data.tasks)
+        setTasks(response.data.tasks)
+      }
+    }).catch(error=>{
+      //console.log(error.response.data.message)
+      setErrMess(error?.response?.data.message);
+    }).finally(()=>{
+      errorTimer();
+    })
+  }else{
+    getAllTasks()
+  }
+  };
+
+  function errorTimer (){ setTimeout(() => {
+    setErrMess("");
+  }, 5000);
+}
+
   return (
+    
     <div className="animate-fade-in font-montserrat">
+      
       {openAddModal && (
-        <Add onCancel={handleButtonClick} onSubmit={handleButtonClick}></Add>
+        <Add onCancel={handleButtonClick} onSubmit={handleButtonClick} setLoadingPage={setLoadingPage}></Add>
       )}
+      
       {showView && <View onClose={handleButtonClick} />}
-      {showEdit && <Edit onClose={handleButtonClick} />}
-      {showDelete && <Delete onClose={handleButtonClick} />}
+      {showEdit && <Edit onClose={handleButtonClick} onSubmit={handleButtonClick} setLoadingPage={setLoadingPage}/>}
+      {showDelete && <Delete onClose={handleButtonClick} setLoadingPage={setLoadingPage}/>}
       <div className="flex z-0">
         <div className="w-[14%] dark:bg-black">
           <Sidebar setChosenID={setChosenID} />
         </div>
-        <div className="w-[86%] h-full dark:bg-black">
+
+        <div className="w-[86%] dark:bg-black flex flex-col">
           <Header />
-          <div className="bg-[#F3F3F3] h-[91.9vh]">
+          {loadingPage ?
+          <GenSpinner/>
+        :
+          <div className="bg-[#F3F3F3] h-[91.1vh] pb-[3%] overflow-auto flex-grow">
             {/* First Section */}
+      {errMess !=='' && 
+          <UserNotification
+            icon={<AiFillExclamationCircle/>}
+            logocolor='#ff0000'
+            title="Error!"
+            message={errMess}
+          />
+      }
             <div className="flex pt-[2%] pl-[3%]">
               <div className="flex items-center w-[57%]">
                 <FaClipboardList className="text-[1.5em]" />
@@ -168,6 +242,8 @@ function App() {
                   type="text"
                   placeholder="Search Task Title or Description..."
                   className="pl-[5%] w-[52%] border-2 rounded-[10px] mr-[1%]"
+                  onChange={(e)=>{handleChangeSearch(e)}}
+                  value={searchQuery}
                 ></input>
                 <div className="flex w-[28%] bg-white border-2 rounded-[10px] relative">
                   <h1 className="absolute top-[23%] pl-[5%] font-semibold">
@@ -188,11 +264,15 @@ function App() {
                 </div>
                 <button
                   className="ml-[1%] bg-white border-[2px] rounded-[10px] px-[2%]"
+                  value={order}
                   onClick={() => {
-                    setOrder(order == "ASC" ? "DESC" : "ASC");
-                  }}
+                    setOrder(order === "ASC" ? "DESC" : "ASC");
+                  }
+                  
+                  }
                 >
-                  {order == "ASC" ? (
+                  {order === "ASC" ?
+                  (
                     <Icon
                       className="animate-pop1 text-[#707070]"
                       path={mdiSortCalendarAscending}
@@ -262,6 +342,7 @@ function App() {
               )}
             </div>
           </div>
+                        }
         </div>
       </div>
     </div>
