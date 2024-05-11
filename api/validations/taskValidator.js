@@ -2,6 +2,19 @@ function isNumeric(value) {
     return !isNaN(parseFloat(value)) && isFinite(value);
   }
 
+function containsSQLKeywords(obj) {
+    for (let key in obj) {
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        if (containsSQLKeywords(obj[key])) {
+          return true;
+        }
+      } else if (typeof obj[key] === 'string' && /INSERT|DELETE/i.test(obj[key])) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 const createTaskValidator = (req,res,next)=>{
     let error = ""
 
@@ -51,7 +64,30 @@ const deleteTaskValidator = (req,res,next)=>{
     
 }
 
+const searchLikeTaskValidator = (req, res, next) =>{
+    if (req.query){
+        const {col1,val1,col2,val2,order} = req.query;
+        const queryParams = {col1,val1,col2,val2,order};
+        if (containsSQLKeywords(queryParams)) {
+            // Handle the case where SQL keywords are detected
+            console.error('SQL keywords detected in the query parameters');
+            return res.status(400).json({status: 400, success: false, message: 'Invalid Input! Malformed'})
+          } else {
+            if(val2 === null || val2 === undefined){
+                return res.status(400).json({status: 400, success: false, message: 'Invalid Input! Cannot be NULL'})
+            }
+            else{
+                next();
+            }
+          }
+    }else{
+        console.error('Invalid Request, Cannot be Empty');
+        return res.status(400).json({status: 400, success: false, message: 'Invalid Input! Cannot be NULL'})
+    }
+}
+
 module.exports = {
     createTaskValidator,
-    deleteTaskValidator
+    deleteTaskValidator,
+    searchLikeTaskValidator,
 };
