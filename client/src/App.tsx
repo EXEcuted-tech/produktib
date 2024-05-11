@@ -43,17 +43,16 @@ function App() {
     if (filter == "all") {
       getAllTasks();
     } else if (filter == "pending") {
-      //console.log("Went in here");
       getPendingTasks();
     } else if (filter == "inprogress") {
       getProgressTasks();
     } else {
       getFinishedTasks();
     }
-  }, [chosenID, filter]);
+  }, [chosenID, filter, order]);
 
   const handleOptionsClick = (taskId: number) => {
-    console.log("Task ID: ", taskId);
+    //console.log("Task ID: ", taskId);
     setActiveTaskId(taskId);
     localStorage.setItem("task_id", JSON.stringify(activeTaskId));
   };
