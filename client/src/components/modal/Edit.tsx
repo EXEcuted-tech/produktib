@@ -13,6 +13,9 @@ const Edit = ({ onClose }) => {
   const [taskDesc, setTaskDesc] = useState("");
   const [taskStatus, setTaskStatus] = useState("");
   const [showDiscard, setShowDiscard] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  setLoading(true);
 
   const handleCancel = () => {
     setShowDiscard(false);
