@@ -98,7 +98,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
     <div className="w-full h-full">
       {openCategory && <Category handleButtonClick={handleButtonClick} setLoadingPage={setLoadingPage} />}
       {openEditCategory && (
-        <EditCategory handleButtonClick={handleButtonClick} />
+        <EditCategory handleButtonClick={handleButtonClick} setLoadingPage={setLoadingPage}/>
       )}
       <div className="bg-[#001A27] h-[8vh] rounded-tr-3xl dark:bg-[#1c1c1c]">
         <img

@@ -6,12 +6,16 @@ import Discard from "./Discard";
 import axios from "axios";
 import config from "../../common/config";
 import { CatCardProps } from "../../common/interface";
+import UserNotification from "../alerts/Notification";
+import { AiFillExclamationCircle } from "react-icons/ai";
+import BounceLoader from "react-spinners/ClipLoader";
 
-const EditCategory = ({ handleButtonClick }) => {
-  const [catName, setCatName] = useState("");
+const EditCategory = ({ handleButtonClick, setLoadingPage }) => {
   const [color, setColor] = useState("");
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [showDiscard, setShowDiscard] = useState(false);
+  const [errMess,setErrMess] = useState("");
+  const [loading,setLoading]=useState(false);
 
   const catID = localStorage.getItem("category_id");
   const colorPickerRef = useRef<HTMLDivElement>(null);
@@ -21,30 +25,36 @@ const EditCategory = ({ handleButtonClick }) => {
     setShowColorPicker(!showColorPicker);
   };
 
-  const editCategoryTask = async () => {
+  const editCategoryTask = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    setLoadingPage(true)
     try {
       const response = await axios.post(`${config.API}/category/update`, {
-        category_name: catName,
+        category_name: cat?.category_name,
         color: color,
         category_id: catID,
       });
-      if (response.status === 200) {
-        console.log("Request created successfully", response.data);
+      if (response.data.success === true) {
+        setErrMess("");
+
+        setTimeout(()=>{
+          setLoading(false)
+          setLoadingPage(false)
+        },1000)
+        
+        handleButtonClick();
       } else {
-        console.error("Failed to create category", response.status);
+        setLoadingPage(false)
+        setLoading(false)
+        setErrMess(response.data.error);
       }
     } catch (error) {
       console.error("Error creating category", error);
     }
   };
 
-  const handleSaveClick = async () => {
-    const updatedCategories = await editCategoryTask();
-    handleButtonClick(updatedCategories);
-  };
-
   useEffect(() => {
-    // console.log("Entered!");
     axios
       .get(`${config.API}/category/retrieve?col=category_id&val=${catID}`)
       .then((res) => {
@@ -53,7 +63,6 @@ const EditCategory = ({ handleButtonClick }) => {
           console.log(res.data.category[0]);
           setCat(res.data.category[0]);
           setColor(res.data.category[0].color);
-          setCatName(res.data.category[0].category_name);
         }
       })
       .catch((err) => {});
@@ -98,13 +107,19 @@ const EditCategory = ({ handleButtonClick }) => {
     }));
   };
 
-  //Ig update sa record kay i-insert lang balik ang color hayzz sala nis color picker
-
   return (
     <div className="absolute font-montserrat z-[250]">
       {showDiscard && (
         <Discard onClose={handleButtonClick} onCancel={handleCancel} />
       )}
+                  {errMess !='' && 
+          <UserNotification
+            icon={<AiFillExclamationCircle/>}
+            logocolor='#ff0000'
+            title="Error!"
+            message={errMess}
+          />
+      }
       <form>
         <div className="animate-fade-in z-0 absolute top-0 left-0 bg-[rgba(0,0,0,0.1)] w-[100vw] h-[100vh] backdrop-brightness-50">
           <div className="w-[50%] h-[55%] rounded-2xl shadow-xl bg-white mt-[10%] mb-auto ml-[33%] mr-auto justify-center">
@@ -133,8 +148,8 @@ const EditCategory = ({ handleButtonClick }) => {
                   type="text"
                   className="w-[92%] p-4 pl-5 rounded-xl bg-white border-[3px] border-[#FFB703] text-2xl
                             placeholder-gray-500 placeholder:font-bold font-bold"
-                  value={catName}
-                  onChange={(e) => handleChange(e.target.value)}
+                  value={cat?.category_name}
+                  onChange={(e) => handleChange(e)}
                 ></input>
               </div>
             </div>
@@ -179,17 +194,19 @@ const EditCategory = ({ handleButtonClick }) => {
             {/* Buttons */}
             <div className="flex flex-row justify-end mt-[2%]">
               <button
-                className="py-[1%] px-[2%] text-[#023047] text-[1.3em] rounded-[3px] bg-[#D6D6D6] font-semibold mr-[2%] hover:bg-[#bebebe] transition-colors delay-250 duration-[3000] ease-in"
+                className="py-[1%] px-[2%] text-[#023047] dark:hover:bg-slate-200 text-[1.3em] rounded-[3px] bg-[#D6D6D6] font-semibold mr-[2%] hover:bg-[#bebebe] transition-colors delay-250 duration-[3000] ease-in"
                 onClick={() => setShowDiscard(true)}
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="py-[1%] px-[3%] text-[1.3em] text-white rounded-[3px] bg-[#FB8500] font-semibold mr-[8%] hover:bg-[#FF9925] transition-colors delay-250 duration-[3000] ease-in"
-                onClick={() => handleSaveClick()}
+                className="py-[1%] px-[3%] text-[1.3em] text-white rounded-[3px] bg-[#FB8500] dark:hover:bg-gray-800 font-semibold mr-[8%] hover:bg-[#FF9925] transition-colors delay-250 duration-[3000] ease-in"
+                onClick={(e) => editCategoryTask(e)}
               >
-                Save
+                  <div className="flex justify-evenly items-center duration-100">  
+                    <BounceLoader color="#FFFFFF" loading={loading} /> Save
+                  </div>
               </button>
             </div>
           </div>
