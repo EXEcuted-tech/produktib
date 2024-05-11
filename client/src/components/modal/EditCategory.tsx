@@ -60,6 +60,7 @@ const EditCategory = ({ handleButtonClick }) => {
   }, []);
 
   useEffect(() => {
+    
     const handleClickOutside = (event) => {
       if (
         colorPickerRef.current &&
