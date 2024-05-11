@@ -82,7 +82,10 @@ function App() {
           setTasks([]);
         }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        error.response? setErrMess(error.response?.data.message): setErrMess("Request Failed!");
+        errorTimer();
+      });
   };
 
   const getPendingTasks = () => {
@@ -99,7 +102,10 @@ function App() {
           setTasks([]);
         }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        error.response? setErrMess(error.response?.data.message): setErrMess("Request Failed!");
+        errorTimer();
+      });
   };
 
   const getProgressTasks = () => {
@@ -116,7 +122,10 @@ function App() {
         setTasks([]);
       }
     })
-    .catch((error) => {});
+    .catch((error) => {
+      error.response? setErrMess(error.response?.data.message): setErrMess("Request Failed!");
+      errorTimer();
+    });
     
     
   };
@@ -135,7 +144,10 @@ function App() {
           setTasks([]);
         }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        error.response? setErrMess(error.response?.data.message): setErrMess("Request Failed!");
+        errorTimer();
+      });
   };
 
   const handleButtonClick = () => {

@@ -4,11 +4,14 @@ import BounceLoader from "react-spinners/ClipLoader";
 import { GoAlertFill } from "react-icons/go";
 import axios from "axios";
 import config from "../../common/config";
+import UserNotification from "../alerts/Notification";
+import { AiFillExclamationCircle } from "react-icons/ai";
 /* Modify this Component to add functionalities */
 
 const Delete = ({onClose,setLoadingPage}) => {
   const [taskId, setTaskId] =useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [errMess,setErrMess] = useState("");
   
   const handleClick = ()=>{
     const id = localStorage.getItem('task_id');
@@ -27,11 +30,29 @@ const Delete = ({onClose,setLoadingPage}) => {
       },1000)
 
       onClose();
+    }).catch((error)=>{
+      error.response? setErrMess(error.response?.data.message): setErrMess("Request Failed!");
+      errorTimer();
     })
+    
   }
+
+  const errorTimer =  ()=>{ setTimeout(() => {
+    setErrMess("");
+  }, 5000);
   
+}
+
   return (
     <div className="absolute z-[150] inset-0 backdrop-brightness-50 flex items-center justify-center">
+      {errMess !='' && 
+          <UserNotification
+            icon={<AiFillExclamationCircle/>}
+            logocolor='#ff0000'
+            title="Error!"
+            message={errMess}
+          />
+      }
       <div className="absolute z-[150] ml-[15%] bg-white rounded-lg shadow-md overflow-hidden w-full max-w-sm font-montserrat">
         {/* X close button */}
         <section className="flex justify-end p-2">
