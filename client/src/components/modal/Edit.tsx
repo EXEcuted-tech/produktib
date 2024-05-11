@@ -45,16 +45,16 @@ const Edit = ({ onClose, onSubmit }) => {
   };
 
   useEffect(() => {
-    console.log("Entered!");
+    //console.log("Entered!");
     axios
       .get(`${config.API}/task/viewcol?col=task_id&val=${taskID}`)
       .then((res) => {
-        console.log("Response: ", res);
+
         if (res.data.success == true) {
-          console.log(res.data.category[0]);
-          setTaskTitle(res.data.category[0]);
-          setTaskDesc(res.data.category[0].color);
-          setTaskStatus(res.data.category[0].category_name);
+          console.log(res.data.tasks[0]);
+          setTaskTitle(res.data.tasks[0].title);
+          setTaskDesc(res.data.tasks[0].description);
+          setTaskStatus(res.data.tasks[0].task_status);
         }
       })
       .catch((err) => {});

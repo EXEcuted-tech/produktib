@@ -108,7 +108,7 @@ const retrieveAll = (req,res)=>{
 
 const retrieveByParams = (req,res)=>{
   const {col1,val1,col2,val2,order} = req.query;
-  console.log("i am her");
+  //console.log("i am her");
   const retrieveTasks = `SELECT * FROM task WHERE ??=? AND ??=? ORDER BY time_stamp ${order}`
 
   db.query(retrieveTasks,[col1,val1,col2,val2], (err, rows) => {
