@@ -10,7 +10,7 @@ import { CatCardProps, SidebarProps } from "../../common/interface";
 
 const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
   const [category, setCategory] = useState<CatCardProps[]>([]);
-  const [currID, setCurrID] = useState(1);
+  const [currID, setCurrID] = useState(localStorage.getItem("category_id")!="0" ? Number(localStorage.getItem("category_id")) : 1);
   const [openCategory, setOpenCategory] = useState(false);
   const [openEditCategory, setOpenEditCategory] = useState(false);
 
@@ -23,7 +23,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
       .then((res) => {
         if (res.data.success == true) {
           setCategory(res.data.category);
-          handleCategorySelection(1);
+          //handleCategorySelection(1);
         }
       })
       .catch((error) => {});
@@ -40,13 +40,14 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
     localStorage.setItem("cat_id", JSON.stringify(catId));
   };
 
-  const handleCategorySelection = (categoryId: number) => {
+  const handleCategorySelection = (categoryId: number,categoryTitle: string) => {
     console.log("Sidebar Value: ", categoryId);
     localStorage.removeItem("category_id");
     setCurrID(categoryId);
     setChosenID(JSON.stringify(categoryId));
     localStorage.setItem("category_id", JSON.stringify(categoryId));
-    console.log(localStorage.getItem("category_id"));
+    localStorage.setItem("cat_title", categoryTitle);
+    //console.log(localStorage.getItem("category_id"));
   };
 
   const toggleOptions = (catId: number) => {
@@ -107,7 +108,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
                     ? "bg-[#085A83] dark:bg-white"
                     : "bg-none"
                 } py-[3%] hover:cursor-pointer`}
-                onClick={() => handleCategorySelection(cat.category_id)}
+                onClick={() => handleCategorySelection(cat.category_id,cat.category_name)}
               >
                 <div className="flex items-center justify-between mx-[10%]">
                   <div className="flex items-center">

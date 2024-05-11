@@ -81,8 +81,8 @@ const View = ({ onClose }) => {
                 Task Description
               </p>
             </div>
-            <div className="ml-[16%] pt-[1%] w-[17vw] flex">
-              <p className="text-[1.2em] text-[#023047] font-regular text-justify dark:text-white">
+            <div className="ml-[16%] pt-[1%] w-[15vw] flex text-ellipsis">
+              <p className="text-wrap truncate text-justify text-[1.2em] text-[#023047] font-regular dark:text-white">
                 {task.description}
               </p>
             </div>
