@@ -162,15 +162,13 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
                       className="text-[1.15em] mr-2"
                       style={{ color: cat.color }}
                     />
-                    <div className="w-[5%]">
                       <p
                           className={`text-[1.15em] text-white font-semibold ${
                             cat.category_id == currID && "dark:text-black"
-                          } max-w-[80px]`}
+                          } max-w-[100%]`}
                         >
-                          {truncateText(cat.category_name, 7)}
+                          {truncateText(cat.category_name, 13)}
                         </p>
-                    </div>
                   </div>
                   <BsThreeDotsVertical
                     className={`hover:animate-shake text-white ${
