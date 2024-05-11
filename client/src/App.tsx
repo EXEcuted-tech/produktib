@@ -94,19 +94,21 @@ function App() {
 
   const getProgressTasks = () => {
     axios
-      .get(
-        `${config.API}/task/retrieve?col1=category_id&val1=${chosenID}&col2=task_status&val2=In Progress&order=${order}`
-      )
-      .then((res) => {
-        if (res.data.success == true && res.data.tasks.length > 0) {
-          setTaskExist(true);
-          setTasks(res.data.tasks);
-        } else {
-          setTaskExist(false);
-          setTasks([]);
-        }
-      })
-      .catch((error) => {});
+    .get(
+      `${config.API}/task/retrieve?col1=category_id&val1=${chosenID}&col2=task_status&val2=In Progress&order=${order}`
+    )
+    .then((res) => {
+      if (res.data.success == true && res.data.tasks.length > 0) {
+        setTaskExist(true);
+        setTasks(res.data.tasks);
+      } else {
+        setTaskExist(false);
+        setTasks([]);
+      }
+    })
+    .catch((error) => {});
+    
+    
   };
 
   const getFinishedTasks = () => {
@@ -145,7 +147,7 @@ function App() {
         <Add onCancel={handleButtonClick} onSubmit={handleButtonClick}></Add>
       )}
       {showView && <View onClose={handleButtonClick} />}
-      {showEdit && <Edit onClose={handleButtonClick} />}
+      {showEdit && <Edit onClose={handleButtonClick} onSubmit={handleButtonClick}/>}
       {showDelete && <Delete onClose={handleButtonClick} />}
       <div className="flex z-0">
         <div className="w-[14%] dark:bg-black">
@@ -188,11 +190,15 @@ function App() {
                 </div>
                 <button
                   className="ml-[1%] bg-white border-[2px] rounded-[10px] px-[2%]"
+                  value={order}
                   onClick={() => {
                     setOrder(order == "ASC" ? "DESC" : "ASC");
-                  }}
+                  }
+                  
+                  }
                 >
-                  {order == "ASC" ? (
+                  {order == "ASC" ?
+                  (
                     <Icon
                       className="animate-pop1 text-[#707070]"
                       path={mdiSortCalendarAscending}

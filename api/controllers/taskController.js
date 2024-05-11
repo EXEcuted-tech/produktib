@@ -44,8 +44,9 @@ const updateTask = (req,res)=>{
         success: true,
         message: "Task successfully updated",
         task_id: results.insertId 
-      });
+      })
     }
+    
   });
 }
 
@@ -66,6 +67,24 @@ const deleteTask = (req,res)=>{
       })
     }
   })
+}
+
+const retrieveColumn = (req,res)=>{   
+  const {col,val} = req.query;
+  const retrieveTask = 'SELECT * FROM task WHERE ??=?'
+
+  db.query(retrieveTask,[col, val], (err, rows) => {
+    if (err) {
+      console.error('Error retrieving all records:', err);
+      return res.status(500).json({ status: 500, success:false,error: 'Error retrieving records' });
+    }else{
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        tasks: rows,
+      });
+    }
+  });
 }
 
 const retrieveAll = (req,res)=>{   
@@ -89,7 +108,7 @@ const retrieveAll = (req,res)=>{
 
 const retrieveByParams = (req,res)=>{
   const {col1,val1,col2,val2,order} = req.query;
-    
+  console.log("i am her");
   const retrieveTasks = `SELECT * FROM task WHERE ??=? AND ??=? ORDER BY time_stamp ${order}`
 
   db.query(retrieveTasks,[col1,val1,col2,val2], (err, rows) => {
@@ -112,6 +131,7 @@ module.exports = {
     createTask,
     updateTask,
     retrieveAll,
+    retrieveColumn,
     retrieveByParams,
     deleteTask,
 }
