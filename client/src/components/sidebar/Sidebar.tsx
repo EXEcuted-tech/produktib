@@ -137,7 +137,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
       {loadingPage ?
       <ThreeDots/>
     :
-      <div className="bg-primary h-[92vh] dark:bg-[#292929]">
+      <div className="bg-primary h-[92vh] dark:bg-[#292929] overflow-auto">
         <div className="mx-[10%] pt-[7%] flex items-center">
           <h1 className="font-bold text-[#D3D3D3] text-[1.15em] mr-[7%] dark:white">
             TASK CATEGORIES
