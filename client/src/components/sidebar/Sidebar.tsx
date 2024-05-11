@@ -8,6 +8,7 @@ import Category from "../modal/Category";
 import EditCategory from "../modal/EditCategory";
 import { CatCardProps, SidebarProps } from "../../common/interface";
 import ThreeDots from "../loaders/threeDots";
+import DeleteCat from "../modal/DeleteCat";
 
 const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
   const [category, setCategory] = useState<CatCardProps[]>([]);
@@ -17,6 +18,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
   const [loadingPage, setLoadingPage] = useState(false);
 
   const [showOptions, setShowOptions] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
   const [activeCatId, setActiveCatId] = useState<number | null>(null);
   const pickerRef = useRef<HTMLDivElement>(null);
 
@@ -67,7 +69,8 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
     setActiveCatId(catId);
   };
 
-  const handleClick = (category_id:number) => {
+  const handleClick = () => {
+    var category_id = Number(localStorage.getItem('categoryz_id'));
     var defaultTitle = localStorage.getItem('default_title')!='' && localStorage.getItem('default_title');
     //console.log("CATEGORY ID BEH: ", category_id);
     setLoadingPage(true);
@@ -76,12 +79,12 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
         category_id: category_id,
       })
       .then((res) => {
-        console.log("Res: ",res);
         if (res.data.success === true) {
           setTimeout(()=>{
             setLoadingPage(false)
             handleCategorySelection(1,defaultTitle || "");
           },5000)
+          setShowDelete(false);
           setShowOptions(false);
         }
         
@@ -119,6 +122,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
 
   return (
     <div className="w-full h-full">
+       {showDelete && <DeleteCat onClose={handleButtonClick} handleClick={handleClick}/>}
       {openCategory && <Category handleButtonClick={handleButtonClick} setLoadingPage={setLoadingPage} />}
       {openEditCategory && (
         <EditCategory handleButtonClick={handleButtonClick} setLoadingPage={setLoadingPage}/>
@@ -162,15 +166,13 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
                       className="text-[1.15em] mr-2"
                       style={{ color: cat.color }}
                     />
-                    <div className="w-[5%]">
                       <p
                           className={`text-[1.15em] text-white font-semibold ${
                             cat.category_id == currID && "dark:text-black"
-                          } max-w-[80px]`}
+                          } max-w-[100%]`}
                         >
                           {truncateText(cat.category_name, 13)}
                         </p>
-                    </div>
                   </div>
                   <BsThreeDotsVertical
                     className={`hover:animate-shake text-white ${
@@ -181,7 +183,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
                   {activeCatId === cat.category_id && showOptions && (
                     <div 
                     ref={pickerRef}
-                    className="animate-fade-in absolute bg-lightBlue mt-[3%] rounded-[5px] text-[0.8em] w-[8%] left-[12.5%] dark:bg-gray-500 z-0 drop-shadow-md">
+                    className="animate-fade-in absolute bg-lightBlue mt-[3%] rounded-[5px] text-[0.8em] w-[8%] left-[12.5%] dark:bg-gray-500 z-[100] drop-shadow-md">
                       
                       <ul className="z-[250]">
                         <li
@@ -195,7 +197,11 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
                         <li
                           className="flex items-center py-[5%] pl-[6%] hover:bg-white hover:rounded-[5px] hover:cursor-pointer dark:text-white
                                         dark:hover:bg-gray-600"
-                          onClick={()=>handleClick(cat.category_id)}
+                          onClick={()=>{
+                            localStorage.setItem('categoryz_id',JSON.stringify(cat.category_id))
+                            setShowDelete(true);
+                           }
+                          }
                         >
                           <FaTrashAlt />
                           <p className="ml-[3%]">Delete Category</p>

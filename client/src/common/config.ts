@@ -1,3 +1,3 @@
 export default{
-    API:"http://localhost:5000"
+    API:"https://produktib-1.onrender.com"
 }

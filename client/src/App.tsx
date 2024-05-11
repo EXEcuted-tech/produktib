@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { FaMoon, FaRegMoon } from "react-icons/fa";
 import Add from "./components/modal/Add";
 import axios from "axios";
 
 import Sidebar from "./components/sidebar/Sidebar";
 import Header from "./components/header/Header";
-import Discard from "./components/modal/Discard";
 import Delete from "./components/modal/Delete";
 import Edit from "./components/modal/Edit";
-import Category from "./components/modal/Category";
 import View from "./components/side pane/View Details";
 
 import { FaClipboardList, FaSearch, FaPlus } from "react-icons/fa";
-import { LuArrowDownUp, LuArrowUpDown } from "react-icons/lu";
 import { BsThreeDots } from "react-icons/bs";
 import Icon from "@mdi/react";
 import { mdiSortCalendarAscending, mdiSortCalendarDescending } from "@mdi/js";
@@ -33,8 +29,7 @@ function App() {
   const [order, setOrder] = useState("ASC");
   const [filter, setFilter] = useState("all");
   const [tasks, setTasks] = useState<TaskCardProps[]>([]);
-  const [chosenID, setChosenID] = useState(localStorage.getItem("category_id")!="0" ? localStorage.getItem("category_id") : "1");
-  const [currTaskId, setCurrTaskId] = useState("1");
+  const [chosenID, setChosenID] = useState(localStorage.getItem("category_id")!=="0" ? localStorage.getItem("category_id") : "1");
   const [loadingPage, setLoadingPage] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [openAddModal, setOpenAddModal] = useState(false);
@@ -46,11 +41,11 @@ function App() {
 
   useEffect(() => {
     console.log("Category ID! ", chosenID);
-    if (filter == "all") {
+    if (filter === "all") {
       getAllTasks();
-    } else if (filter == "pending") {
+    } else if (filter === "pending") {
       getPendingTasks();
-    } else if (filter == "inprogress") {
+    } else if (filter === "inprogress") {
       getProgressTasks();
     } else {
       getFinishedTasks();
@@ -74,7 +69,7 @@ function App() {
         `${config.API}/task/retrieve_all?col=category_id&val=${chosenID}&order=${order}`
       )
       .then((res) => {
-        if (res.data.success == true && res.data.tasks.length > 0) {
+        if (res.data.success === true && res.data.tasks.length > 0) {
           setTaskExist(true);
           setTasks(res.data.tasks);
         } else {
@@ -94,7 +89,7 @@ function App() {
         `${config.API}/task/retrieve?col1=category_id&val1=${chosenID}&col2=task_status&val2=Not Started&order=${order}`
       )
       .then((res) => {
-        if (res.data.success == true && res.data.tasks.length > 0) {
+        if (res.data.success === true && res.data.tasks.length > 0) {
           setTaskExist(true);
           setTasks(res.data.tasks);
         } else {
@@ -114,7 +109,7 @@ function App() {
       `${config.API}/task/retrieve?col1=category_id&val1=${chosenID}&col2=task_status&val2=In Progress&order=${order}`
     )
     .then((res) => {
-      if (res.data.success == true && res.data.tasks.length > 0) {
+      if (res.data.success === true && res.data.tasks.length > 0) {
         setTaskExist(true);
         setTasks(res.data.tasks);
       } else {
@@ -136,7 +131,7 @@ function App() {
         `${config.API}/task/retrieve?col1=category_id&val1=${chosenID}&col2=task_status&val2=Completed&order=${order}`
       )
       .then((res) => {
-        if (res.data.success == true && res.data.tasks.length > 0) {
+        if (res.data.success === true && res.data.tasks.length > 0) {
           setTaskExist(true);
           setTasks(res.data.tasks);
         } else {
@@ -179,8 +174,8 @@ function App() {
       }
     }
     ).then(response =>{
-      if(response.status == 200){
-        if(response.data.tasks.length == 0){
+      if(response.status === 200){
+        if(response.data.tasks.length === 0){
           setTasks(response.data.tasks)
           setErrMess("No Results Found");
         }
@@ -226,7 +221,7 @@ function App() {
         :
           <div className="bg-[#F3F3F3] h-[91.1vh] pb-[3%] overflow-auto flex-grow">
             {/* First Section */}
-      {errMess !='' && 
+      {errMess !=='' && 
           <UserNotification
             icon={<AiFillExclamationCircle/>}
             logocolor='#ff0000'
@@ -271,12 +266,12 @@ function App() {
                   className="ml-[1%] bg-white border-[2px] rounded-[10px] px-[2%]"
                   value={order}
                   onClick={() => {
-                    setOrder(order == "ASC" ? "DESC" : "ASC");
+                    setOrder(order === "ASC" ? "DESC" : "ASC");
                   }
                   
                   }
                 >
-                  {order == "ASC" ?
+                  {order === "ASC" ?
                   (
                     <Icon
                       className="animate-pop1 text-[#707070]"
