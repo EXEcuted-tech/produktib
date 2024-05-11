@@ -1,3 +1,3 @@
 export default{
-    API:"https://produktib-1.onrender.com/"
+    API:"https://produktib-1.onrender.com"
 }
