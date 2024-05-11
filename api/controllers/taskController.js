@@ -107,11 +107,31 @@ const retrieveByParams = (req,res)=>{
   });
 }
 
+const retrieveByParamsLike = (req,res)=>{
+  const {col1,val1,col2,val2,order} = req.query;
+  const retrieveTasks = `SELECT * FROM task WHERE ??=? AND (?? LIKE ? OR ?? LIKE ?) ORDER BY time_stamp ${order}`
+  const queryParams = [col1,val1,col2[0],`%${val2}%`,col2[1],`%${val2}%`];
+  db.query(retrieveTasks,queryParams, (err, rows) => {
+    console.log('SQL Query:', retrieveTasks, queryParams);
+    if (err) {
+      console.error('Error retrieving all records:', err);
+      return res.status(500).json({ status: 500, success:false,error: 'Error retrieving all records' });
+    }else{
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        tasks: rows,
+      });
+    }
+  });
+}
+
 
 module.exports = {
     createTask,
     updateTask,
     retrieveAll,
     retrieveByParams,
+    retrieveByParamsLike,
     deleteTask,
 }
