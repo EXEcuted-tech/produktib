@@ -22,6 +22,7 @@ import search from "./assets/search.png";
 import config from "./common/config";
 import { TaskCardProps } from "./common/interface";
 import TaskCard from "./components/card/TaskCard";
+import GenSpinner from "./components/loaders/genSpinner";
 
 //We will use this ra since usa ra ato page hehe
 
@@ -30,8 +31,9 @@ function App() {
   const [order, setOrder] = useState("ASC");
   const [filter, setFilter] = useState("all");
   const [tasks, setTasks] = useState<TaskCardProps[]>([]);
-  const [chosenID, setChosenID] = useState("1");
+  const [chosenID, setChosenID] = useState(localStorage.getItem("category_id")!="0" ? localStorage.getItem("category_id") : "1");
   const [currTaskId, setCurrTaskId] = useState("1");
+  const [loadingPage, setLoadingPage] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [openAddModal, setOpenAddModal] = useState(false);
   const [activeTaskId, setActiveTaskId] = useState<number | null>(null);
@@ -40,6 +42,7 @@ function App() {
   const [showDelete, setShowDelete] = useState(false);
 
   useEffect(() => {
+    console.log("Category ID! ", chosenID);
     if (filter == "all") {
       getAllTasks();
     } else if (filter == "pending") {
@@ -49,7 +52,12 @@ function App() {
     } else {
       getFinishedTasks();
     }
-  }, [chosenID, filter, order]);
+  }, [chosenID, filter, order,loadingPage]);
+
+
+  useEffect(()=>{
+    console.log("Loading: ",loadingPage)
+  },[])
 
   const handleOptionsClick = (taskId: number) => {
     //console.log("Task ID: ", taskId);
@@ -133,6 +141,7 @@ function App() {
     setShowView(false);
     setShowEdit(false);
     setShowDelete(false);
+    //console.log(localStorage.getItem("category_id"));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -166,18 +175,22 @@ function App() {
   return (
     <div className="animate-fade-in font-montserrat">
       {openAddModal && (
-        <Add onCancel={handleButtonClick} onSubmit={handleButtonClick}></Add>
+        <Add onCancel={handleButtonClick} onSubmit={handleButtonClick} setLoadingPage={setLoadingPage}></Add>
       )}
       {showView && <View onClose={handleButtonClick} />}
       {showEdit && <Edit onClose={handleButtonClick} onSubmit={handleButtonClick}/>}
-      {showDelete && <Delete onClose={handleButtonClick} />}
+      {showDelete && <Delete onClose={handleButtonClick} setLoadingPage={setLoadingPage}/>}
       <div className="flex z-0">
         <div className="w-[14%] dark:bg-black">
           <Sidebar setChosenID={setChosenID} />
         </div>
-        <div className="w-[86%] h-full dark:bg-black">
+
+        <div className="w-[86%] dark:bg-black flex flex-col">
           <Header />
-          <div className="bg-[#F3F3F3] h-[91.9vh]">
+          {loadingPage ?
+          <GenSpinner/>
+        :
+          <div className="bg-[#F3F3F3] h-[91.1vh] pb-[3%] overflow-auto flex-grow">
             {/* First Section */}
             <div className="flex pt-[2%] pl-[3%]">
               <div className="flex items-center w-[57%]">
@@ -292,6 +305,7 @@ function App() {
               )}
             </div>
           </div>
+                        }
         </div>
       </div>
     </div>

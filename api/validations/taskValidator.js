@@ -18,14 +18,25 @@ function containsSQLKeywords(obj) {
 const createTaskValidator = (req,res,next)=>{
     let error = ""
 
-    if(!req.body.title || req.body.title.length > 30){
-        error = "Task title is invalid"
+    //console.log(req.body.title);
+
+    if(!req.body.title || req.body.title == ''){
+        error = "Task Title is required!"
     }
 
-    if(req.body.description.length > 200){
-        error = "Task description is too long"
+    if(!req.body.description || req.body.description == ''){
+        error = "Task Description is required!"
     }
 
+    if(req.body.title.length > 30){
+        error = "Task Title too long!"
+    }
+
+    if(req.body.description.length > 1000){
+        error = "Task Description is too long!"
+    }
+
+    console.log("Error: ",error);
     if (error !== '') {
         return res.json({
             status: 404,

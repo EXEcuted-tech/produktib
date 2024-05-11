@@ -3,7 +3,7 @@ const router = express.Router();
 const {createTaskValidator, searchLikeTaskValidator, deleteTaskValidator} = require('../validations/taskValidator')
 const { createTask, updateTask,retrieveColumn,retrieveAll,retrieveByParamsLike,retrieveByParams,deleteTask} = require('../controllers/taskController');
 
-router.post('/create', createTask);
+router.post('/create', createTaskValidator,createTask);
 router.get('/viewcol', retrieveColumn)
 router.post('/update',updateTask);
 router.get('/retrieve', retrieveByParams);

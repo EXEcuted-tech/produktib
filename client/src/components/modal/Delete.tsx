@@ -6,7 +6,7 @@ import axios from "axios";
 import config from "../../common/config";
 /* Modify this Component to add functionalities */
 
-const Delete = ({onClose}) => {
+const Delete = ({onClose,setLoadingPage}) => {
   const [taskId, setTaskId] =useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   
@@ -14,7 +14,7 @@ const Delete = ({onClose}) => {
     const id = localStorage.getItem('task_id');
     setTaskId(id);
     setLoading(true);
-    
+    setLoadingPage(true);
     axios.post(`${config.API}/task/delete`,{
       task_id:id
     }).then((res)=>{
@@ -22,7 +22,11 @@ const Delete = ({onClose}) => {
         console.log('error', res)
       }
 
-      window.location.reload();
+      setTimeout(()=>{
+        setLoadingPage(false)
+      },1000)
+
+      onClose();
     })
   }
   
