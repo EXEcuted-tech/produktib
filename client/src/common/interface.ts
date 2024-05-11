@@ -29,5 +29,5 @@ export interface CatCardProps {
 }
 
 export interface SidebarProps {
-    setChosenID: React.Dispatch<React.SetStateAction<string>>;
+    setChosenID: React.Dispatch<React.SetStateAction<string | null>>;
 }
