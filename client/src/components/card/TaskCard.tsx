@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { TaskCardProps } from "../../common/interface";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import { FaEye, FaPencilAlt, FaTrashAlt } from "react-icons/fa";
@@ -8,7 +8,7 @@ import Delete from "../modal/Delete";
 
 const TaskCard: React.FC<TaskCardProps> = (task) => {
   const [showOptions, setShowOptions] = useState(false);
-  
+  const pickerRef = useRef<HTMLDivElement>(null);
   const [openEditTask, setOpenEditTask] = useState(false);
 
   const shortDesc =
@@ -32,6 +32,27 @@ const TaskCard: React.FC<TaskCardProps> = (task) => {
     // console.log(task.isActive," ",showOptions, "Task_ID: ",task.task_id)
     task.handleOptionsClick(taskId);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        pickerRef.current &&
+        !pickerRef.current.contains(event.target as Node)
+      ) {
+        setShowOptions(false);
+      }
+    };
+
+    if (showOptions) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showOptions]);
 
   return (
     <div className="relative w-[93%] bg-white mx-[3%] mt-[1%] rounded-lg drop-shadow-md dark:bg-black z-0">
@@ -64,7 +85,9 @@ const TaskCard: React.FC<TaskCardProps> = (task) => {
                 onClick={() => toggleOptions(task.task_id)}
               />
               {task.isActive && showOptions && (
-                <div className="animate-fade-in absolute bg-white top-[-80%] rounded-[5px] border text-[0.8em] w-[8%] ml-[1%] dark:bg-gray-500 z-0">
+                <div
+                ref={pickerRef}
+                className="animate-fade-in absolute bg-white top-[-80%] rounded-[5px] border text-[0.8em] w-[8%] ml-[1%] dark:bg-gray-500 z-0">
                   <ul className="z-[250]">
                     <li
                       className="flex items-center py-[5%] pl-[6%] hover:bg-[#d6d6d6] hover:cursor-pointer dark:text-white

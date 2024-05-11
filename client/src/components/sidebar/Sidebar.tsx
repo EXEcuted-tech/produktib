@@ -16,6 +16,8 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
 
   const [showOptions, setShowOptions] = useState(false);
   const [activeCatId, setActiveCatId] = useState<number | null>(null);
+  const pickerRef = useRef<HTMLDivElement>(null);
+
 
   useEffect(() => {
     axios
@@ -74,6 +76,27 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
       });
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        pickerRef.current &&
+        !pickerRef.current.contains(event.target as Node)
+      ) {
+        setShowOptions(false);
+      }
+    };
+
+    if (showOptions) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showOptions]);
+
   return (
     <div className="w-full h-full">
       {openCategory && <Category handleButtonClick={handleButtonClick} />}
@@ -131,7 +154,10 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
                     onClick={() => toggleOptions(cat.category_id)}
                   />
                   {activeCatId === cat.category_id && showOptions && (
-                    <div className="animate-fade-in absolute bg-lightBlue ml-[11.2%] mt-[3%] rounded-[5px] text-[0.8em] w-[8%] ml-[1%] dark:bg-gray-500 z-0 drop-shadow-md">
+                    <div 
+                    ref={pickerRef}
+                    className="animate-fade-in absolute bg-lightBlue mt-[3%] rounded-[5px] text-[0.8em] w-[8%] ml-[1%] dark:bg-gray-500 z-0 drop-shadow-md">
+                      
                       <ul className="z-[250]">
                         <li
                           className="flex items-center py-[5%] pl-[6%] hover:bg-white hover:rounded-[5px] hover:cursor-pointer dark:text-white

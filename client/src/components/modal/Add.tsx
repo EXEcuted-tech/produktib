@@ -63,7 +63,7 @@ const Add = ({ onSubmit, onCancel, setLoadingPage }) => {
           />
       }
       <div className="w-[50%] h-[60%] ml-[33%] mr-auto mt-[10%] mb-auto rounded-2xl z-100">
-        <div className="flex items-center w-full h-[20%] bg-[#023047] items-center rounded-2xl rounded-b-none dark:bg-black">
+        <div className="flex items-center w-full h-[20%] bg-[#023047] rounded-2xl rounded-b-none dark:bg-black">
           <p className="text-white w-[85%] ml-[6%] text-4xl font-bold ">
             Add Task
           </p>
