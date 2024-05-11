@@ -155,8 +155,12 @@ function App() {
       }
     }
     ).then(response =>{
-      console.log(response.data.tasks)
-      setTasks(response.data.tasks)
+      if(response.status == 200){
+        console.log(response.data.tasks)
+        setTasks(response.data.tasks)
+      }
+    }).catch(error=>{
+      console.log(error.response.data.message)
     })
   }else{
     getAllTasks()
