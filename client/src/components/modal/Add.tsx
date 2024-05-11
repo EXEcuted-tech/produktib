@@ -4,48 +4,64 @@ import { FaT, FaAlignLeft, FaAlignJustify } from "react-icons/fa6";
 import { IoCloseOutline } from "react-icons/io5";
 import config from "../../common/config";
 import BounceLoader from "react-spinners/ClipLoader";
+import UserNotification from "../alerts/Notification";
+import { AiFillExclamationCircle } from "react-icons/ai";
 
 const Add = ({ onSubmit, onCancel, setLoadingPage }) => {
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDesc, setTaskDesc] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errMess,setErrMess] = useState("");
+  
   const catID = localStorage.getItem("category_id");
 
-  const addTask = async () => {
+  const addTask = (e) => {
+    e.preventDefault();
     //console.log(catID);
     setLoading(true);
     setLoadingPage(true);
     try {
-      const response = await axios.post(`${config.API}/task/create`, {
+      axios.post(`${config.API}/task/create`, {
         category_id: catID,
         title: taskTitle,
         description: taskDesc,
-      });
-      if (response.status === 200) {
-        setTimeout(()=>{
-          setLoading(false)
-        },10000)
+      }).then((res) =>{
+        console.log("Response, ",res);
+        if(res.data.success === true){
+          setErrMess("");
 
-        setTimeout(()=>{
+          setTimeout(()=>{
+            setLoading(false)
+            setLoadingPage(false)
+          },1000)
+          
+          onSubmit();
+        }else{
           setLoadingPage(false)
-        },10000)
-
+          setLoading(false)
+          setErrMess(res.data.error);
+        }
         //console.log("Request created successfully", response.data);
-      } else {
-        //console.error("Failed to create category", response.status);
-      }
-    } catch (error) {
-      console.error("Error creating category", error);
-    }
-  };
+      })
+      .catch((error) => {
+        console.log("Error: ",error);
+      });
 
-  const handleSaveClick = async () => {
-    await addTask();
-    onSubmit();
+    } catch (error) {
+        //console.error("Error creating category", error);
+    }
   };
 
   return (
     <div className="animate-fade-in absolute w-full h-full overflow-auto text-2xl z-[100] backdrop-brightness-50">
+      {errMess !='' && 
+          <UserNotification
+            icon={<AiFillExclamationCircle/>}
+            logocolor='#ff0000'
+            title="Error!"
+            message={errMess}
+          />
+      }
       <div className="w-[50%] h-[60%] ml-[33%] mr-auto mt-[10%] mb-auto rounded-2xl z-100">
         <div className="flex items-center w-full h-[20%] bg-[#023047] items-center rounded-2xl rounded-b-none dark:bg-black">
           <p className="text-white w-[85%] ml-[6%] text-4xl font-bold ">
@@ -98,7 +114,7 @@ const Add = ({ onSubmit, onCancel, setLoadingPage }) => {
                 type="submit"
                 className="flex text-white ml-[3%] bg-[#FB8500] font-semibold py-2.5 px-6 rounded-[3px] dark:bg-black
                                                             hover:bg-[#FF9925] dark:hover:bg-gray-800 transition-colors delay-250 duration-[3000] ease-in"
-                onClick={() => handleSaveClick()}
+                onClick={(e) => addTask(e)}
               >
                  <div className="flex justify-evenly items-center duration-100">  
                     <BounceLoader color="#FFFFFF" loading={loading} /> Save
