@@ -49,6 +49,9 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
     setChosenID(JSON.stringify(categoryId));
     localStorage.setItem("category_id", JSON.stringify(categoryId));
     localStorage.setItem("cat_title", categoryTitle);
+    if(categoryId==1){
+      localStorage.setItem("default_title",categoryTitle);
+    }
     //console.log(localStorage.getItem("category_id"));
   };
 
@@ -62,17 +65,24 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
     setActiveCatId(catId);
   };
 
-  const handleClick = (category_id) => {
-    console.log("CATEGORY ID BEH: ", category_id);
+  const handleClick = (category_id:number) => {
+    var defaultTitle = localStorage.getItem('default_title')!='' && localStorage.getItem('default_title');
+    //console.log("CATEGORY ID BEH: ", category_id);
+    setLoadingPage(true);
     axios
       .post(`${config.API}/category/delete`, {
         category_id: category_id,
       })
       .then((res) => {
-        if (res.status != 200) {
-          console.error("FAILED TO DELETE", res);
+        console.log("Res: ",res);
+        if (res.data.success === true) {
+          setTimeout(()=>{
+            setLoadingPage(false)
+            handleCategorySelection(1,defaultTitle || "");
+          },5000)
+          setShowOptions(false);
         }
-        window.location.reload();
+        
       });
   };
 
@@ -159,6 +169,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
                         <li
                           className="flex items-center py-[5%] pl-[6%] hover:bg-white hover:rounded-[5px] hover:cursor-pointer dark:text-white
                                         dark:hover:bg-gray-600"
+                          onClick={()=>handleClick(cat.category_id)}
                         >
                           <FaTrashAlt />
                           <p className="ml-[3%]">Delete Category</p>
