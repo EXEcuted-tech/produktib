@@ -8,7 +8,7 @@ import Category from "../modal/Category";
 import EditCategory from "../modal/EditCategory";
 import { CatCardProps, SidebarProps } from "../../common/interface";
 import ThreeDots from "../loaders/threeDots";
-import Delete from "../modal/Delete";
+import DeleteCat from "../modal/DeleteCat";
 
 const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
   const [category, setCategory] = useState<CatCardProps[]>([]);
@@ -69,7 +69,8 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
     setActiveCatId(catId);
   };
 
-  const handleClick = (category_id:number) => {
+  const handleClick = () => {
+    var category_id = Number(localStorage.getItem('categoryz_id'));
     var defaultTitle = localStorage.getItem('default_title')!='' && localStorage.getItem('default_title');
     //console.log("CATEGORY ID BEH: ", category_id);
     setLoadingPage(true);
@@ -78,7 +79,6 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
         category_id: category_id,
       })
       .then((res) => {
-        console.log("Res: ",res);
         if (res.data.success === true) {
           setTimeout(()=>{
             setLoadingPage(false)
@@ -121,7 +121,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
 
   return (
     <div className="w-full h-full">
-       {showDelete && <Delete onClose={handleButtonClick} setLoadingPage={setLoadingPage}/>}
+       {showDelete && <DeleteCat onClose={handleButtonClick} handleClick={handleClick}/>}
       {openCategory && <Category handleButtonClick={handleButtonClick} setLoadingPage={setLoadingPage} />}
       {openEditCategory && (
         <EditCategory handleButtonClick={handleButtonClick} setLoadingPage={setLoadingPage}/>
@@ -196,8 +196,10 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
                         <li
                           className="flex items-center py-[5%] pl-[6%] hover:bg-white hover:rounded-[5px] hover:cursor-pointer dark:text-white
                                         dark:hover:bg-gray-600"
-                          onClick={()=>
-                            handleClick(cat.category_id)
+                          onClick={()=>{
+                            localStorage.setItem('categoryz_id',JSON.stringify(cat.category_id))
+                            setShowDelete(true);
+                           }
                           }
                         >
                           <FaTrashAlt />

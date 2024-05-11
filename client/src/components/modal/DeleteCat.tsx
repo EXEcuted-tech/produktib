@@ -8,51 +8,12 @@ import UserNotification from "../alerts/Notification";
 import { AiFillExclamationCircle } from "react-icons/ai";
 /* Modify this Component to add functionalities */
 
-const Delete = ({onClose,setLoadingPage}) => {
-  const [taskId, setTaskId] =useState<string | null>(null);
+const DeleteCat = ({onClose,handleClick}) => {
   const [loading, setLoading] = useState(false);
-  const [errMess,setErrMess] = useState("");
-  
-  const handleClick = ()=>{
-    const id = localStorage.getItem('task_id');
-    setTaskId(id);
-    setLoading(true);
-    setLoadingPage(true);
-    axios.post(`${config.API}/task/delete`,{
-      task_id:id
-    }).then((res)=>{
-      if(res.status !== 200){
-        console.log('error', res)
-      }
 
-      setTimeout(()=>{
-        setLoadingPage(false)
-      },1000)
-
-      onClose();
-    }).catch((error)=>{
-      error.response? setErrMess(error.response?.data.message): setErrMess("Request Failed!");
-      errorTimer();
-    })
-    
-  }
-
-  const errorTimer =  ()=>{ setTimeout(() => {
-    setErrMess("");
-  }, 5000);
-  
-}
 
   return (
     <div className="absolute z-[150] inset-0 backdrop-brightness-50 flex items-center justify-center">
-      {errMess !='' && 
-          <UserNotification
-            icon={<AiFillExclamationCircle/>}
-            logocolor='#ff0000'
-            title="Error!"
-            message={errMess}
-          />
-      }
       <div className="absolute z-[150] ml-[15%] bg-white rounded-lg shadow-md overflow-hidden w-full max-w-sm font-montserrat">
         {/* X close button */}
         <section className="flex justify-end p-2">
@@ -70,7 +31,7 @@ const Delete = ({onClose,setLoadingPage}) => {
             Are You Sure?
           </h3>
           <p className="font-light text-center">
-            Do you want to delete this task? This process cannot be undone.
+            Do you want to delete this category? This process cannot be undone.
           </p>
         </section>
 
@@ -94,4 +55,4 @@ const Delete = ({onClose,setLoadingPage}) => {
   );
 };
 
-export default Delete;
+export default DeleteCat;
