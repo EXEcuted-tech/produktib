@@ -32,7 +32,7 @@ function App() {
   const [tasks, setTasks] = useState<TaskCardProps[]>([]);
   const [chosenID, setChosenID] = useState("1");
   const [currTaskId, setCurrTaskId] = useState("1");
-
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [openAddModal, setOpenAddModal] = useState(false);
   const [activeTaskId, setActiveTaskId] = useState<number | null>(null);
   const [showView, setShowView] = useState(false);
@@ -140,6 +140,29 @@ function App() {
     setFilter(e.target.value);
   };
 
+  const handleChangeSearch = (e) => {
+    console.log(e.target.value)
+    setSearchQuery(e.target.value)
+    if(e.target.value){
+    axios.get(
+      `${config.API}/task/retrievelike`,{
+        params:{  
+          col1: 'category_id',
+          val1: `${chosenID}`,
+          col2: ['title', 'description'],
+          val2: searchQuery,
+          order: `${order}`
+      }
+    }
+    ).then(response =>{
+      console.log(response.data.tasks)
+      setTasks(response.data.tasks)
+    })
+  }else{
+    getAllTasks()
+  }
+  };
+
   return (
     <div className="animate-fade-in font-montserrat">
       {openAddModal && (
@@ -169,6 +192,8 @@ function App() {
                   type="text"
                   placeholder="Search Task Title or Description..."
                   className="pl-[5%] w-[52%] border-2 rounded-[10px] mr-[1%]"
+                  onChange={(e)=>{handleChangeSearch(e)}}
+                  value={searchQuery}
                 ></input>
                 <div className="flex w-[28%] bg-white border-2 rounded-[10px] relative">
                   <h1 className="absolute top-[23%] pl-[5%] font-semibold">
