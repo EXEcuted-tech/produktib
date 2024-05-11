@@ -77,7 +77,13 @@ const searchLikeTaskValidator = (req, res, next) =>{
                 return res.status(400).json({status: 400, success: false, message: 'Invalid Input! Cannot be NULL'})
             }
             else{
-                next();
+                if (val2.length <= 100){ //100 character limit
+                    next();
+                }else{
+                    console.error('Character Limit Reached');
+                    return res.status(400).json({status: 400, success: false, message: 'Invalid Input! Character Limit Reached'})
+                }
+                
             }
           }
     }else{

@@ -23,6 +23,8 @@ import config from "./common/config";
 import { TaskCardProps } from "./common/interface";
 import TaskCard from "./components/card/TaskCard";
 import GenSpinner from "./components/loaders/genSpinner";
+import UserNotification from "./components/alerts/Notification";
+import { AiFillExclamationCircle } from "react-icons/ai";
 
 //We will use this ra since usa ra ato page hehe
 
@@ -40,6 +42,7 @@ function App() {
   const [showView, setShowView] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
+  const [errMess,setErrMess] = useState("");
 
   useEffect(() => {
     console.log("Category ID! ", chosenID);
@@ -79,7 +82,10 @@ function App() {
           setTasks([]);
         }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        error.response? setErrMess(error.response?.data.message): setErrMess("Request Failed!");
+        errorTimer();
+      });
   };
 
   const getPendingTasks = () => {
@@ -96,7 +102,10 @@ function App() {
           setTasks([]);
         }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        error.response? setErrMess(error.response?.data.message): setErrMess("Request Failed!");
+        errorTimer();
+      });
   };
 
   const getProgressTasks = () => {
@@ -113,7 +122,10 @@ function App() {
         setTasks([]);
       }
     })
-    .catch((error) => {});
+    .catch((error) => {
+      error.response? setErrMess(error.response?.data.message): setErrMess("Request Failed!");
+      errorTimer();
+    });
     
     
   };
@@ -132,7 +144,10 @@ function App() {
           setTasks([]);
         }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        error.response? setErrMess(error.response?.data.message): setErrMess("Request Failed!");
+        errorTimer();
+      });
   };
 
   const handleButtonClick = () => {
@@ -145,7 +160,7 @@ function App() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    console.log(e.target.value);
+    //console.log(e.target.value);
     setFilter(e.target.value);
   };
 
@@ -164,19 +179,38 @@ function App() {
       }
     }
     ).then(response =>{
-      console.log(response.data.tasks)
-      setTasks(response.data.tasks)
+      if(response.status == 200){
+        if(response.data.tasks.length == 0){
+          setTasks(response.data.tasks)
+          setErrMess("No Results Found");
+        }
+        //console.log(response.data.tasks)
+        setTasks(response.data.tasks)
+      }
+    }).catch(error=>{
+      //console.log(error.response.data.message)
+      setErrMess(error?.response?.data.message);
+    }).finally(()=>{
+      errorTimer();
     })
   }else{
     getAllTasks()
   }
   };
 
+  function errorTimer (){ setTimeout(() => {
+    setErrMess("");
+  }, 5000);
+}
+
   return (
+    
     <div className="animate-fade-in font-montserrat">
+      
       {openAddModal && (
         <Add onCancel={handleButtonClick} onSubmit={handleButtonClick} setLoadingPage={setLoadingPage}></Add>
       )}
+      
       {showView && <View onClose={handleButtonClick} />}
       {showEdit && <Edit onClose={handleButtonClick} onSubmit={handleButtonClick}/>}
       {showDelete && <Delete onClose={handleButtonClick} setLoadingPage={setLoadingPage}/>}
@@ -192,6 +226,14 @@ function App() {
         :
           <div className="bg-[#F3F3F3] h-[91.1vh] pb-[3%] overflow-auto flex-grow">
             {/* First Section */}
+      {errMess !='' && 
+          <UserNotification
+            icon={<AiFillExclamationCircle/>}
+            logocolor='#ff0000'
+            title="Error!"
+            message={errMess}
+          />
+      }
             <div className="flex pt-[2%] pl-[3%]">
               <div className="flex items-center w-[57%]">
                 <FaClipboardList className="text-[1.5em]" />
