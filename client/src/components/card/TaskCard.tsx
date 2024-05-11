@@ -8,6 +8,8 @@ import Delete from "../modal/Delete";
 
 const TaskCard: React.FC<TaskCardProps> = (task) => {
   const [showOptions, setShowOptions] = useState(false);
+  
+  const [openEditTask, setOpenEditTask] = useState(false);
 
   const shortDesc =
     task.description.length > 80
@@ -15,6 +17,11 @@ const TaskCard: React.FC<TaskCardProps> = (task) => {
       : task.description;
 
   useEffect(() => {}, []);
+
+  const handleTaskDropdown = (taskId: number) => {
+    setOpenEditTask(true);
+    localStorage.setItem("cat_id", JSON.stringify(taskId));
+  };
 
   const toggleOptions = (taskId: number) => {
     if (task.isActive) {
@@ -79,7 +86,7 @@ const TaskCard: React.FC<TaskCardProps> = (task) => {
                                     dark:hover:bg-gray-600"
                       onClick={() => {
                         task.setShowEdit(true);
-                        task.handleOptionsClick(0);
+                        task.handleOptionsClick(task.task_id);
                         localStorage.setItem(
                           "task_id",
                           JSON.stringify(task.task_id)
@@ -95,10 +102,7 @@ const TaskCard: React.FC<TaskCardProps> = (task) => {
                       onClick={() => {
                         task.setShowDelete(true);
                         task.handleOptionsClick(0);
-                        localStorage.setItem(
-                          "task_id",
-                          JSON.stringify(task.task_id)
-                        );
+                        handleTaskDropdown(task.task_id);
                       }}
                     >
                       <FaTrashAlt />
