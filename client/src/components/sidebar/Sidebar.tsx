@@ -8,6 +8,7 @@ import Category from "../modal/Category";
 import EditCategory from "../modal/EditCategory";
 import { CatCardProps, SidebarProps } from "../../common/interface";
 import ThreeDots from "../loaders/threeDots";
+import Delete from "../modal/Delete";
 
 const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
   const [category, setCategory] = useState<CatCardProps[]>([]);
@@ -17,6 +18,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
   const [loadingPage, setLoadingPage] = useState(false);
 
   const [showOptions, setShowOptions] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
   const [activeCatId, setActiveCatId] = useState<number | null>(null);
   const pickerRef = useRef<HTMLDivElement>(null);
 
@@ -119,6 +121,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
 
   return (
     <div className="w-full h-full">
+       {showDelete && <Delete onClose={handleButtonClick} setLoadingPage={setLoadingPage}/>}
       {openCategory && <Category handleButtonClick={handleButtonClick} setLoadingPage={setLoadingPage} />}
       {openEditCategory && (
         <EditCategory handleButtonClick={handleButtonClick} setLoadingPage={setLoadingPage}/>
@@ -179,7 +182,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
                   {activeCatId === cat.category_id && showOptions && (
                     <div 
                     ref={pickerRef}
-                    className="animate-fade-in absolute bg-lightBlue mt-[3%] rounded-[5px] text-[0.8em] w-[8%] left-[12.5%] dark:bg-gray-500 z-0 drop-shadow-md">
+                    className="animate-fade-in absolute bg-lightBlue mt-[3%] rounded-[5px] text-[0.8em] w-[8%] left-[12.5%] dark:bg-gray-500 z-[100] drop-shadow-md">
                       
                       <ul className="z-[250]">
                         <li
@@ -193,7 +196,9 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
                         <li
                           className="flex items-center py-[5%] pl-[6%] hover:bg-white hover:rounded-[5px] hover:cursor-pointer dark:text-white
                                         dark:hover:bg-gray-600"
-                          onClick={()=>handleClick(cat.category_id)}
+                          onClick={()=>
+                            handleClick(cat.category_id)
+                          }
                         >
                           <FaTrashAlt />
                           <p className="ml-[3%]">Delete Category</p>

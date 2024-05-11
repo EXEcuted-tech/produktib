@@ -70,7 +70,7 @@ const Delete = ({onClose,setLoadingPage}) => {
             Are You Sure?
           </h3>
           <p className="font-light text-center">
-            Do you want to delete this task? This process cannot be undone.
+            Do you want to delete this entity? This process cannot be undone.
           </p>
         </section>
 
