@@ -168,7 +168,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
                             cat.category_id == currID && "dark:text-black"
                           } max-w-[80px]`}
                         >
-                          {truncateText(cat.category_name, 13)}
+                          {truncateText(cat.category_name, 9)}
                         </p>
                     </div>
                   </div>
