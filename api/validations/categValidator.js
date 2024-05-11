@@ -9,6 +9,10 @@ const createCatValidator = (req,res,next)=>{
         error = "Category is required"
     }
 
+    if(req.body.category_name.length > 30){
+        error = "Category name is too long!"
+    }
+
     if(!req.body.color || req.body.color > 7){
         error = "Please input a valid hex color";
     }

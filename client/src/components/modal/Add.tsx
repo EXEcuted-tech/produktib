@@ -3,37 +3,65 @@ import React, { useState } from "react";
 import { FaT, FaAlignLeft, FaAlignJustify } from "react-icons/fa6";
 import { IoCloseOutline } from "react-icons/io5";
 import config from "../../common/config";
+import BounceLoader from "react-spinners/ClipLoader";
+import UserNotification from "../alerts/Notification";
+import { AiFillExclamationCircle } from "react-icons/ai";
 
-const Add = ({ onSubmit, onCancel }) => {
+const Add = ({ onSubmit, onCancel, setLoadingPage }) => {
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDesc, setTaskDesc] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errMess,setErrMess] = useState("");
+  
   const catID = localStorage.getItem("category_id");
 
-  const editTask = async () => {
-    console.log(catID);
+  const addTask = (e) => {
+    e.preventDefault();
+    //console.log(catID);
+    setLoading(true);
+    setLoadingPage(true);
     try {
-      const response = await axios.post(`${config.API}/task/create`, {
+      axios.post(`${config.API}/task/create`, {
         category_id: catID,
         title: taskTitle,
         description: taskDesc,
-      });
-      if (response.status === 200) {
-        console.log("Request created successfully", response.data);
-      } else {
-        console.error("Failed to create category", response.status);
-      }
-    } catch (error) {
-      console.error("Error creating category", error);
-    }
-  };
+      }).then((res) =>{
+        console.log("Response, ",res);
+        if(res.data.success === true){
+          setErrMess("");
 
-  const handleSaveClick = async () => {
-    await editTask();
-    onSubmit();
+          setTimeout(()=>{
+            setLoading(false)
+            setLoadingPage(false)
+          },1000)
+          
+          onSubmit();
+        }else{
+          setLoadingPage(false)
+          setLoading(false)
+          setErrMess(res.data.error);
+        }
+        //console.log("Request created successfully", response.data);
+      })
+      .catch((error) => {
+        console.log("Error: ",error);
+      });
+
+    } catch (error) {
+        //console.error("Error creating category", error);
+    }
   };
 
   return (
     <div className="animate-fade-in absolute w-full h-full overflow-auto text-2xl z-[100] backdrop-brightness-50">
+      {errMess !='' && 
+          <UserNotification
+            icon={<AiFillExclamationCircle/>}
+            logocolor='#ff0000'
+            title="Error!"
+            message={errMess}
+          />
+      }
       <div className="w-[50%] h-[60%] ml-[33%] mr-auto mt-[10%] mb-auto rounded-2xl z-100">
         <div className="flex items-center w-full h-[20%] bg-[#023047] items-center rounded-2xl rounded-b-none dark:bg-black">
           <p className="text-white w-[85%] ml-[6%] text-4xl font-bold ">
@@ -76,19 +104,21 @@ const Add = ({ onSubmit, onCancel }) => {
             </div>
             <div className="flex justify-end">
               <button
-                className="bg-[#D6D6D6] text-[#023047] text-2xl font-bold py-2.5 px-2.5 rounded-[3px] dark:border-black dark:bg-white dark:text-black
-                                               hover:bg-[#b0b0b0] hover:text-[#00314a] transition-colors delay-250 duration-[3000] ease-in"
+                className="bg-[#D6D6D6] text-[#023047] text-2xl font-bold py-2.5 px-2.5 rounded-[3px] dark:border-black dark:bg-slate-200 dark:text-black
+                                               hover:bg-[#b0b0b0] hover:text-[#00314a] dark:hover:bg-slate-400 transition-colors delay-250 duration-[3000] ease-in"
                 onClick={() => onCancel()}
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="text-white ml-[3%] bg-[#FB8500] font-semibold py-2.5 px-6 rounded-[3px] dark:bg-black
-                                                            hover:bg-[#FF9925] transition-colors delay-250 duration-[3000] ease-in"
-                onClick={() => handleSaveClick()}
+                className="flex text-white ml-[3%] bg-[#FB8500] font-semibold py-2.5 px-6 rounded-[3px] dark:bg-black
+                                                            hover:bg-[#FF9925] dark:hover:bg-gray-800 transition-colors delay-250 duration-[3000] ease-in"
+                onClick={(e) => addTask(e)}
               >
-                Save
+                 <div className="flex justify-evenly items-center duration-100">  
+                    <BounceLoader color="#FFFFFF" loading={loading} /> Save
+                    </div>
               </button>
             </div>
           </form>
