@@ -84,6 +84,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
             setLoadingPage(false)
             handleCategorySelection(1,defaultTitle || "");
           },5000)
+          setShowDelete(false);
           setShowOptions(false);
         }
         
