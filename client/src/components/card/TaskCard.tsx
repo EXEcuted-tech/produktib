@@ -22,7 +22,7 @@ const TaskCard: React.FC<TaskCardProps> = (task) => {
     } else {
       setShowOptions(true);
     }
-    console.log(task.isActive, " ", showOptions, "Task_ID: ", task.task_id);
+    // console.log(task.isActive," ",showOptions, "Task_ID: ",task.task_id)
     task.handleOptionsClick(taskId);
   };
 

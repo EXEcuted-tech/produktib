@@ -29,6 +29,7 @@ const Add = ({ onSubmit, onCancel }) => {
 
   const handleSaveClick = async () => {
     await editTask();
+    onSubmit();
   };
 
   return (
