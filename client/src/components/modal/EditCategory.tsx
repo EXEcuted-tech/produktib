@@ -146,7 +146,7 @@ const EditCategory = ({ handleButtonClick, setLoadingPage }) => {
                 <input
                   name="category_name"
                   type="text"
-                  className="w-[92%] p-4 pl-5 rounded-xl bg-white border-[3px] border-[#FFB703] text-2xl
+                  className="dark:border-black w-[92%] p-4 pl-5 rounded-xl bg-white border-[3px] border-[#FFB703] text-2xl
                             placeholder-gray-500 placeholder:font-bold font-bold"
                   value={cat?.category_name}
                   onChange={(e) => handleChange(e)}
@@ -176,7 +176,7 @@ const EditCategory = ({ handleButtonClick, setLoadingPage }) => {
                     placeholder="Type a color"
                     prefixed
                     alpha
-                    className="w-[100%] h-[5vh] rounded-xl bg-white border-[3px] border-[#FFB703] px-[10%]"
+                    className="dark:border-black w-[100%] h-[5vh] rounded-xl bg-white border-[3px] border-[#FFB703] px-[10%]"
                   />
                 </div>
 
@@ -194,14 +194,14 @@ const EditCategory = ({ handleButtonClick, setLoadingPage }) => {
             {/* Buttons */}
             <div className="flex flex-row justify-end mt-[2%]">
               <button
-                className="py-[1%] px-[2%] text-[#023047] dark:hover:bg-slate-200 text-[1.3em] rounded-[3px] bg-[#D6D6D6] font-semibold mr-[2%] hover:bg-[#bebebe] transition-colors delay-250 duration-[3000] ease-in"
+                className="py-[1%] px-[2%] text-[#023047] dark:hover:bg-slate-200 text-[1.3em] rounded-[3px] bg-[#D6D6D6] font-semibold mr-[2%] hover:bg-[#bebebe] transition-colors delay-250 duration-[3000] ease-in dark:bg-slate-200 dark:hover:bg-slate-400"
                 onClick={() => setShowDiscard(true)}
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="py-[1%] px-[3%] text-[1.3em] text-white rounded-[3px] bg-[#FB8500] dark:hover:bg-gray-800 font-semibold mr-[8%] hover:bg-[#FF9925] transition-colors delay-250 duration-[3000] ease-in"
+                className="py-[1%] px-[3%] text-[1.3em] text-white rounded-[3px] bg-[#FB8500] dark:hover:bg-gray-800 font-semibold mr-[8%] hover:bg-[#FF9925] transition-colors delay-250 duration-[3000] ease-in dark:bg-black dark:hover:bg-gray-800"
                 onClick={(e) => editCategoryTask(e)}
               >
                   <div className="flex justify-evenly items-center duration-100">  

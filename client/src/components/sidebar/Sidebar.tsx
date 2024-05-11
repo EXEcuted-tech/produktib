@@ -181,7 +181,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
                   {activeCatId === cat.category_id && showOptions && (
                     <div 
                     ref={pickerRef}
-                    className="animate-fade-in absolute bg-lightBlue mt-[3%] rounded-[5px] text-[0.8em] w-[8%] ml-[1%] dark:bg-gray-500 z-0 drop-shadow-md">
+                    className="animate-fade-in absolute bg-lightBlue mt-[3%] rounded-[5px] text-[0.8em] w-[8%] left-[12.5%] dark:bg-gray-500 z-0 drop-shadow-md">
                       
                       <ul className="z-[250]">
                         <li

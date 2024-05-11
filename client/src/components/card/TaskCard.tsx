@@ -12,8 +12,8 @@ const TaskCard: React.FC<TaskCardProps> = (task) => {
   const [openEditTask, setOpenEditTask] = useState(false);
 
   const shortDesc =
-    task.description.length > 80
-      ? task.description.substring(0, 80) + "..."
+    task.description.length > 75
+      ? task.description.substring(0, 75) + "..."
       : task.description;
 
   useEffect(() => {}, []);
