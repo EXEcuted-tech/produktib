@@ -7,12 +7,14 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import Category from "../modal/Category";
 import EditCategory from "../modal/EditCategory";
 import { CatCardProps, SidebarProps } from "../../common/interface";
+import ThreeDots from "../loaders/threeDots";
 
 const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
   const [category, setCategory] = useState<CatCardProps[]>([]);
   const [currID, setCurrID] = useState(localStorage.getItem("category_id")!="0" ? Number(localStorage.getItem("category_id")) : 1);
   const [openCategory, setOpenCategory] = useState(false);
   const [openEditCategory, setOpenEditCategory] = useState(false);
+  const [loadingPage, setLoadingPage] = useState(false);
 
   const [showOptions, setShowOptions] = useState(false);
   const [activeCatId, setActiveCatId] = useState<number | null>(null);
@@ -27,7 +29,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
         }
       })
       .catch((error) => {});
-  }, []);
+  }, [loadingPage]);
 
   const handleButtonClick = () => {
     setOpenCategory(false);
@@ -74,9 +76,17 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
       });
   };
 
+  const truncateText = (text, maxLength) =>{
+    if (text.length <= maxLength) {
+      return text;
+    } else {
+      return text.slice(0, maxLength) + "...";
+    }
+  }
+
   return (
     <div className="w-full h-full">
-      {openCategory && <Category handleButtonClick={handleButtonClick} />}
+      {openCategory && <Category handleButtonClick={handleButtonClick} setLoadingPage={setLoadingPage} />}
       {openEditCategory && (
         <EditCategory handleButtonClick={handleButtonClick} />
       )}
@@ -87,6 +97,9 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
           className="h-auto w-[15rem] py-[5%] pl-[10%]"
         ></img>
       </div>
+      {loadingPage ?
+      <ThreeDots/>
+    :
       <div className="bg-primary h-[92vh] dark:bg-[#292929]">
         <div className="mx-[10%] pt-[7%] flex items-center">
           <h1 className="font-bold text-[#D3D3D3] text-[1.15em] mr-[7%] dark:white">
@@ -113,16 +126,18 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
                 <div className="flex items-center justify-between mx-[10%]">
                   <div className="flex items-center">
                     <FaCircle
-                      className="mr-[5%] text-[1.15em]"
+                      className="text-[1.15em] mr-2"
                       style={{ color: cat.color }}
                     />
-                    <p
-                      className={`text-[1.15em] text-white font-semibold ${
-                        cat.category_id == currID && "dark:text-black"
-                      } `}
-                    >
-                      {cat.category_name}
-                    </p>
+                    <div className="w-[5%]">
+                      <p
+                          className={`text-[1.15em] text-white font-semibold ${
+                            cat.category_id == currID && "dark:text-black"
+                          } max-w-[80px]`}
+                        >
+                          {truncateText(cat.category_name, 13)}
+                        </p>
+                    </div>
                   </div>
                   <BsThreeDotsVertical
                     className={`hover:animate-shake text-white ${
@@ -158,6 +173,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
           {/* Category Row */}
         </div>
       </div>
+      }
     </div>
   );
 };

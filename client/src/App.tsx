@@ -55,9 +55,9 @@ function App() {
   }, [chosenID, filter, order,loadingPage]);
 
 
-  useEffect(()=>{
-    console.log("Loading: ",loadingPage)
-  },[])
+  // useEffect(()=>{
+  //   console.log("Loading: ",loadingPage)
+  // },[])
 
   const handleOptionsClick = (taskId: number) => {
     //console.log("Task ID: ", taskId);
