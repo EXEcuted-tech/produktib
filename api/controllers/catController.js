@@ -52,23 +52,33 @@ const updateCategory = (req, res) => {
 }
 
 
-const deleteCategory = (req,res)=>{
-  const {category_id} = req.body;
-  const query = `DELETE FROM category WHERE category_id = ?`
+const deleteCategory = (req, res) => {
+  const { category_id } = req.body;
 
-  db.query(query,[category_id],(err, rows)=>{
-    if(err){
-      console.error(`Error deleting record with ID:${category_id}`, err);
-      return res.status(500).json({status: 500, success:false, error: 'Error Deleting Category'});
-    }else{
+  const deleteTasksQuery = `DELETE FROM task WHERE category_id = ?`;
+
+  db.query(deleteTasksQuery, [category_id], (tasksErr, tasksResult) => {
+    if (tasksErr) {
+      console.error(`Error deleting tasks with category ID:${category_id}`, tasksErr);
+      return res.status(500).json({ status: 500, success: false, error: 'Error Deleting Tasks' });
+    }
+
+    const deleteCategoryQuery = `DELETE FROM category WHERE category_id = ?`;
+
+    db.query(deleteCategoryQuery, [category_id], (categoryErr, categoryResult) => {
+      if (categoryErr) {
+        console.error(`Error deleting category with ID:${category_id}`, categoryErr);
+        return res.status(500).json({ status: 500, success: false, error: 'Error Deleting Category' });
+      }
+
       return res.status(200).json({
         status: 200,
         success: true,
-        message: 'Successfully Deleted Category'
-      })
-    }
-  })
-}
+        message: 'Successfully Deleted Category and Associated Tasks'
+      });
+    });
+  });
+};
 
 const retrieveAll = (req,res)=>{   
     const retrieveCategory = 'SELECT * FROM category'
