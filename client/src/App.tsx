@@ -58,9 +58,9 @@ function App() {
   }, [chosenID, filter, order,loadingPage]);
 
 
-  useEffect(()=>{
-    console.log("Loading: ",loadingPage)
-  },[])
+  // useEffect(()=>{
+  //   console.log("Loading: ",loadingPage)
+  // },[])
 
   const handleOptionsClick = (taskId: number) => {
     //console.log("Task ID: ", taskId);
@@ -212,7 +212,7 @@ function App() {
       )}
       
       {showView && <View onClose={handleButtonClick} />}
-      {showEdit && <Edit onClose={handleButtonClick} onSubmit={handleButtonClick}/>}
+      {showEdit && <Edit onClose={handleButtonClick} onSubmit={handleButtonClick} setLoadingPage={setLoadingPage}/>}
       {showDelete && <Delete onClose={handleButtonClick} setLoadingPage={setLoadingPage}/>}
       <div className="flex z-0">
         <div className="w-[14%] dark:bg-black">

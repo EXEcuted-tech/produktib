@@ -63,7 +63,7 @@ const Add = ({ onSubmit, onCancel, setLoadingPage }) => {
           />
       }
       <div className="w-[50%] h-[60%] ml-[33%] mr-auto mt-[10%] mb-auto rounded-2xl z-100">
-        <div className="flex items-center w-full h-[20%] bg-[#023047] rounded-2xl rounded-b-none dark:bg-black">
+        <div className="flex items-center w-full h-[20%] bg-[#023047] items-center rounded-2xl rounded-b-none dark:bg-black">
           <p className="text-white w-[85%] ml-[6%] text-4xl font-bold ">
             Add Task
           </p>
@@ -104,8 +104,8 @@ const Add = ({ onSubmit, onCancel, setLoadingPage }) => {
             </div>
             <div className="flex justify-end">
               <button
-                className="bg-[#D6D6D6] text-[#023047] text-2xl font-bold py-2.5 px-2.5 rounded-[3px] dark:border-black dark:bg-white dark:text-black
-                                               hover:bg-[#b0b0b0] hover:text-[#00314a] dark:hover:bg-slate-200 transition-colors delay-250 duration-[3000] ease-in"
+                className="bg-[#D6D6D6] text-[#023047] text-2xl font-bold py-2.5 px-2.5 rounded-[3px] dark:border-black dark:bg-slate-200 dark:text-black
+                                               hover:bg-[#b0b0b0] hover:text-[#00314a] dark:hover:bg-slate-400 transition-colors delay-250 duration-[3000] ease-in"
                 onClick={() => onCancel()}
               >
                 Cancel

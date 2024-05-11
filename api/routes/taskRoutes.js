@@ -5,7 +5,7 @@ const { createTask, updateTask,retrieveColumn,retrieveAll,retrieveByParamsLike,r
 
 router.post('/create', createTaskValidator,createTask);
 router.get('/viewcol', retrieveColumn)
-router.post('/update',updateTask);
+router.post('/update',createTaskValidator,updateTask);
 router.get('/retrieve', retrieveByParams);
 router.get('/retrievelike',searchLikeTaskValidator, retrieveByParamsLike);
 router.get('/retrieve_all',retrieveAll);

@@ -11,7 +11,6 @@ const Header = () => {
   const title = localStorage.getItem('cat_title');
   
   useEffect(()=>{
-    
   },[title])
   
   return (

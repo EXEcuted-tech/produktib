@@ -7,12 +7,14 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import Category from "../modal/Category";
 import EditCategory from "../modal/EditCategory";
 import { CatCardProps, SidebarProps } from "../../common/interface";
+import ThreeDots from "../loaders/threeDots";
 
 const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
   const [category, setCategory] = useState<CatCardProps[]>([]);
   const [currID, setCurrID] = useState(localStorage.getItem("category_id")!="0" ? Number(localStorage.getItem("category_id")) : 1);
   const [openCategory, setOpenCategory] = useState(false);
   const [openEditCategory, setOpenEditCategory] = useState(false);
+  const [loadingPage, setLoadingPage] = useState(false);
 
   const [showOptions, setShowOptions] = useState(false);
   const [activeCatId, setActiveCatId] = useState<number | null>(null);
@@ -29,7 +31,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
         }
       })
       .catch((error) => {});
-  }, []);
+  }, [loadingPage]);
 
   const handleButtonClick = () => {
     setOpenCategory(false);
@@ -49,6 +51,9 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
     setChosenID(JSON.stringify(categoryId));
     localStorage.setItem("category_id", JSON.stringify(categoryId));
     localStorage.setItem("cat_title", categoryTitle);
+    if(categoryId==1){
+      localStorage.setItem("default_title",categoryTitle);
+    }
     //console.log(localStorage.getItem("category_id"));
   };
 
@@ -62,19 +67,34 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
     setActiveCatId(catId);
   };
 
-  const handleClick = (category_id) => {
-    console.log("CATEGORY ID BEH: ", category_id);
+  const handleClick = (category_id:number) => {
+    var defaultTitle = localStorage.getItem('default_title')!='' && localStorage.getItem('default_title');
+    //console.log("CATEGORY ID BEH: ", category_id);
+    setLoadingPage(true);
     axios
       .post(`${config.API}/category/delete`, {
         category_id: category_id,
       })
       .then((res) => {
-        if (res.status != 200) {
-          console.error("FAILED TO DELETE", res);
+        console.log("Res: ",res);
+        if (res.data.success === true) {
+          setTimeout(()=>{
+            setLoadingPage(false)
+            handleCategorySelection(1,defaultTitle || "");
+          },5000)
+          setShowOptions(false);
         }
-        window.location.reload();
+        
       });
   };
+
+  const truncateText = (text, maxLength) =>{
+    if (text.length <= maxLength) {
+      return text;
+    } else {
+      return text.slice(0, maxLength) + "...";
+    }
+  }
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -99,9 +119,9 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
 
   return (
     <div className="w-full h-full">
-      {openCategory && <Category handleButtonClick={handleButtonClick} />}
+      {openCategory && <Category handleButtonClick={handleButtonClick} setLoadingPage={setLoadingPage} />}
       {openEditCategory && (
-        <EditCategory handleButtonClick={handleButtonClick} />
+        <EditCategory handleButtonClick={handleButtonClick} setLoadingPage={setLoadingPage}/>
       )}
       <div className="bg-[#001A27] h-[8vh] rounded-tr-3xl dark:bg-[#1c1c1c]">
         <img
@@ -110,6 +130,9 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
           className="h-auto w-[15rem] py-[5%] pl-[10%]"
         ></img>
       </div>
+      {loadingPage ?
+      <ThreeDots/>
+    :
       <div className="bg-primary h-[92vh] dark:bg-[#292929]">
         <div className="mx-[10%] pt-[7%] flex items-center">
           <h1 className="font-bold text-[#D3D3D3] text-[1.15em] mr-[7%] dark:white">
@@ -136,16 +159,18 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
                 <div className="flex items-center justify-between mx-[10%]">
                   <div className="flex items-center">
                     <FaCircle
-                      className="mr-[5%] text-[1.15em]"
+                      className="text-[1.15em] mr-2"
                       style={{ color: cat.color }}
                     />
-                    <p
-                      className={`text-[1.15em] text-white font-semibold ${
-                        cat.category_id == currID && "dark:text-black"
-                      } `}
-                    >
-                      {cat.category_name}
-                    </p>
+                    <div className="w-[5%]">
+                      <p
+                          className={`text-[1.15em] text-white font-semibold ${
+                            cat.category_id == currID && "dark:text-black"
+                          } max-w-[80px]`}
+                        >
+                          {truncateText(cat.category_name, 13)}
+                        </p>
+                    </div>
                   </div>
                   <BsThreeDotsVertical
                     className={`hover:animate-shake text-white ${
@@ -156,7 +181,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
                   {activeCatId === cat.category_id && showOptions && (
                     <div 
                     ref={pickerRef}
-                    className="animate-fade-in absolute bg-lightBlue mt-[3%] rounded-[5px] text-[0.8em] w-[8%] ml-[1%] dark:bg-gray-500 z-0 drop-shadow-md">
+                    className="animate-fade-in absolute bg-lightBlue mt-[3%] rounded-[5px] text-[0.8em] w-[8%] left-[12.5%] dark:bg-gray-500 z-0 drop-shadow-md">
                       
                       <ul className="z-[250]">
                         <li
@@ -170,6 +195,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
                         <li
                           className="flex items-center py-[5%] pl-[6%] hover:bg-white hover:rounded-[5px] hover:cursor-pointer dark:text-white
                                         dark:hover:bg-gray-600"
+                          onClick={()=>handleClick(cat.category_id)}
                         >
                           <FaTrashAlt />
                           <p className="ml-[3%]">Delete Category</p>
@@ -184,6 +210,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setChosenID }) => {
           {/* Category Row */}
         </div>
       </div>
+      }
     </div>
   );
 };

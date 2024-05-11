@@ -6,21 +6,30 @@ import Discard from "./Discard";
 import axios from "axios";
 import config from "../../common/config";
 import { TaskCardProps } from "../../common/interface";
+import BounceLoader from "react-spinners/ClipLoader";
+import UserNotification from "../alerts/Notification";
+import { AiFillExclamationCircle } from "react-icons/ai";
 
-const Edit = ({ onClose, onSubmit }) => {
+const Edit = ({ onClose, onSubmit,setLoadingPage}) => {
   const [taskId, setTaskId] = useState<string | null>(null);
   
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDesc, setTaskDesc] = useState("");
   const [taskStatus, setTaskStatus] = useState("");
   const [showDiscard, setShowDiscard] = useState(false);
+  const [loading,setLoading]=useState(false);
+  const [errMess,setErrMess]=useState("")
 
 
   const [task, setTask] = useState<TaskCardProps>();
 
   const taskID = localStorage.getItem("task_id");
 
-  const editTask = async () => {
+  const editTask = async (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+    setLoadingPage(true);
     try {
       const response = await axios.post(`${config.API}/task/update`, {
         title: taskTitle,
@@ -28,20 +37,24 @@ const Edit = ({ onClose, onSubmit }) => {
         task_status: taskStatus,
         task_id: taskID,
       });
-      if (response.status === 200) {
-        console.log("Request updated successfully", response.data);
+      console.log("Response?",response);
+      if (response.data.success==true) {
+        setErrMess("");
+
+        setTimeout(()=>{
+          setLoading(false)
+          setLoadingPage(false)
+        },1000)
+        
+        onSubmit();
       } else {
-        console.error("Failed to update category", response.status);
+        setLoadingPage(false)
+        setLoading(false)
+        setErrMess(response.data.error);
       }
     } catch (error) {
       console.error("Error updating category", error);
     }
-  };
-
-  const handleSaveClick = async () => {
-    const updatedTask = await editTask();
-    onSubmit(updatedTask);
-    window.location.reload();
   };
 
   useEffect(() => {
@@ -62,7 +75,14 @@ const Edit = ({ onClose, onSubmit }) => {
 
   return (
     <div className="absolute font-montserrat z-[250]">
-
+      {errMess !='' && 
+          <UserNotification
+            icon={<AiFillExclamationCircle/>}
+            logocolor='#ff0000'
+            title="Error!"
+            message={errMess}
+          />
+      }
       <div className="z-0 animate-fade-in absolute top-0 left-0 bg-[rgba(0,0,0,0.1)] w-[100vw] h-[100vh] backdrop-brightness-50">
         <div className="h-[70%] w-[50%] rounded-2xl shadow-xl bg-white ml-[32%] mt-[7%] justify-center">
           <div className="h-[15%] w-full bg-[#023047] rounded-t-lg flex items-center dark:bg-black">
@@ -86,7 +106,7 @@ const Edit = ({ onClose, onSubmit }) => {
                 type="text"
                 name="title"
                 value={taskTitle}
-                className="w-[93%] h-[4vh] rounded-[15px] py-[3%] bg-white border-[3px] border-[#FFB703] px-[3%]"
+                className="dark:border-black w-[93%] h-[4vh] rounded-[15px] py-[3%] bg-white border-[3px] border-[#FFB703] px-[3%]"
                 onChange={(e) => setTaskTitle(e.target.value)}
               ></input>
             </div>
@@ -105,7 +125,7 @@ const Edit = ({ onClose, onSubmit }) => {
               <textarea
                 name="description"
                 value={taskDesc}
-                className="w-[93%] h-[20vh] rounded-xl bg-white border-[3px] border-[#FFB703] px-[3%] py-[2%] text-justify resize-none"
+                className="dark:border-black w-[93%] h-[20vh] rounded-xl bg-white border-[3px] border-[#FFB703] px-[3%] py-[2%] text-justify resize-none"
                 onChange={(e) => setTaskDesc(e.target.value)}
               ></textarea>
             </div>
@@ -135,14 +155,14 @@ const Edit = ({ onClose, onSubmit }) => {
             </div>
             <div className="w-[40%]"></div>
             <button
-              className="py-[1%] px-[2%] text-[#023047] text-[1.3em] rounded-[3px] bg-[#D6D6D6] font-semibold mr-[2%] hover:bg-[#bebebe] transition-colors delay-250 duration-[3000] ease-in"
+              className="py-[1%] dark:bg-slate-200 dark:hover:bg-slate-400 px-[2%] text-[#023047] text-[1.3em] rounded-[3px] bg-[#D6D6D6] font-semibold mr-[2%] hover:bg-[#bebebe] transition-colors delay-250 duration-[3000] ease-in"
               onClick={() => onClose(true)}
             >
               Cancel
             </button>
             <button 
-              className="py-[1%] px-[3%] text-[1.3em] text-white rounded-[3px] bg-[#FB8500] font-semibold mr-[8%] hover:bg-[#FF9925] transition-colors delay-250 duration-[3000] ease-in"
-              onClick={() => handleSaveClick()}
+              className="py-[1%] px-[3%] dark:bg-black dark:hover:bg-gray-800 text-[1.3em] text-white rounded-[3px] bg-[#FB8500] font-semibold mr-[8%] hover:bg-[#FF9925] transition-colors delay-250 duration-[3000] ease-in"
+              onClick={(e) => editTask(e)}
             >
               Save
             </button>
