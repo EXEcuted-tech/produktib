@@ -33,7 +33,6 @@ const Category = ({ handleButtonClick }) => {
 
   const handleSaveClick = async () => {
     await editCategoryTask();
-    handleButtonClick();
   };
 
   useEffect(() => {

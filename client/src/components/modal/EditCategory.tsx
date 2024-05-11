@@ -133,7 +133,7 @@ const EditCategory = ({ handleButtonClick }) => {
                   className="w-[92%] p-4 pl-5 rounded-xl bg-white border-[3px] border-[#FFB703] text-2xl
                             placeholder-gray-500 placeholder:font-bold font-bold"
                   value={catName}
-                  onChange={(e) => setCatName(e.target.value)}
+                  onChange={(e) => handleChange(e.target.value)}
                 ></input>
               </div>
             </div>
