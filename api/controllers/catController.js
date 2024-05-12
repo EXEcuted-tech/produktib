@@ -20,7 +20,7 @@ const createCategory = (req, res) => {
       return res.status(200).json({
         success: true,
         message: "Category successfully added",
-        category: results.insertId 
+        category: results.insertId
       });
     }
   });
@@ -32,6 +32,7 @@ const updateCategory = (req, res) => {
 
   const updateCategoryQuery = 'UPDATE category SET category_name = ?, color = ? WHERE category_id = ?';
   const data = [category_name, color, category_id];
+  console.log(updateCategoryQuery);
 
   db.query(updateCategoryQuery, data, (err, result) => {
     if (err) {
@@ -42,6 +43,7 @@ const updateCategory = (req, res) => {
         error: 'Error updating category'
       });
     } else {
+      console.log('Affected Rows:', result.affectedRows);
       return res.status(200).json({
         success: true,
         message: "Category successfully updated",
