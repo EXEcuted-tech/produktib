@@ -41,9 +41,9 @@ const updateTask = (req,res)=>{
       });
     } else {
       return res.status(200).json({
+        status: 200,
         success: true,
         message: "Task successfully updated",
-        task_id: results.insertId 
       })
     }
     
