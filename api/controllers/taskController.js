@@ -131,7 +131,7 @@ const retrieveByParamsLike = (req,res)=>{
   const retrieveTasks = `SELECT * FROM task WHERE ??=? AND (?? LIKE ? OR ?? LIKE ?) ORDER BY time_stamp ${order}`
   const queryParams = [col1,val1,col2[0],`%${val2}%`,col2[1],`%${val2}%`];
   db.query(retrieveTasks,queryParams, (err, rows) => {
-    console.log('SQL Query:', retrieveTasks, queryParams);
+    //console.log('SQL Query:', retrieveTasks, queryParams);
     if (err) {
       console.error('Error retrieving all records:', err);
       return res.status(500).json({ status: 500, success:false,error: 'Error retrieving all records' });
