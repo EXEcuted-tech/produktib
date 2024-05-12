@@ -1,6 +1,6 @@
 # Produktib: An Online Task Management System
 
-## Add,update, and manage your takss!
+## Add,update, and manage your tasks!
 
 Welcome to the Produktib README! This document offers an overview of our online task management system's features and setup instructions. This guide will help you get started whether you're a developer looking to incorporate this platform into your website or a user interested in making reservations. This project will entail the details of the following functionalities:
 
@@ -8,6 +8,7 @@ Welcome to the Produktib README! This document offers an overview of our online 
 
 ## Important Links 
 1. [UI Style Guide](https://www.figma.com/file/s4nPFMaeo5i0L4icc8rdEL/Produktib?type=design&node-id=1-2&mode=design)
+2. [API Documentation](https://docs.google.com/spreadsheets/d/1xJmpTP2iD5H3v2Tkwkbd_1yXeBngoTrtC-MpA_OTQOw/edit#gid=0)
 
 ### Setting Up the Project
 1. Clone the project in any local directory you like
