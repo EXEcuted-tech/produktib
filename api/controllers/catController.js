@@ -45,9 +45,9 @@ const updateCategory = (req, res) => {
     } else {
       console.log('Affected Rows:', result.affectedRows);
       return res.status(200).json({
+        status: 200,
         success: true,
         message: "Category successfully updated",
-        affectedRows: result.affectedRows
       });
     }
   });

@@ -1,6 +1,8 @@
 # Produktib: An Online Task Management System
 
-## Add,update, and manage your takss!
+![Image](/client/src/assets/sample.png)
+
+## Add,update, and manage your tasks!
 
 Welcome to the Produktib README! This document offers an overview of our online task management system's features and setup instructions. This guide will help you get started whether you're a developer looking to incorporate this platform into your website or a user interested in making reservations. This project will entail the details of the following functionalities:
 
@@ -8,8 +10,14 @@ Welcome to the Produktib README! This document offers an overview of our online 
 
 ## Important Links 
 1. [UI Style Guide](https://www.figma.com/file/s4nPFMaeo5i0L4icc8rdEL/Produktib?type=design&node-id=1-2&mode=design)
+2. [API Documentation](https://docs.google.com/spreadsheets/d/1xJmpTP2iD5H3v2Tkwkbd_1yXeBngoTrtC-MpA_OTQOw/edit#gid=0)
+3. [Deployed Website](https://produktib.netlify.app/)
 
+  
+## Developer's Guide
+  
 ### Setting Up the Project
+---
 1. Clone the project in any local directory you like
 Example using the git CLI
 ```
@@ -27,21 +35,27 @@ npm install
 ```
 npm start
 ```
-
-## Commands To Run During Develompemnt
+  
+  
+### Commands To Run During Develompemnt
+---
 1. Start your local front-end serve
 ```
 npm start
 
 ```
 2. Make sure to that your XAMPP with the imported database and mySQL server is running as well
-
-## File Structure
+  
+  
+### File Structure
+---
 1. `src\assets` - This is where you place images (.png, .svg, etc...)
 2. `src\components` - Common components to be used throughout the application, you usually don't wanna touch this folder
 5. `src\common` -  Where common utils, style, and colors are compiled and accessed
-
-## Review
+  
+  
+### Review
+---
 1. When you clone the repository, make sure you are in the `main` branch. You can check by running this command:
 ```
 git status
