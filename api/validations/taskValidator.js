@@ -36,7 +36,7 @@ const createTaskValidator = (req,res,next)=>{
         error = "Task Description is too long!"
     }
 
-    console.log("Error: ",error);
+    //console.log("Error: ",error);
     if (error !== '') {
         return res.json({
             status: 404,
